@@ -75,247 +75,6 @@
     code span.vs { color: #4070a0; } /* VerbatimString */
     code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
-  <style>
-:root {
-    --bg: #fafaf7;
-    --paper: #ffffff;
-    --text: #1f2530;
-    --text-soft: #4a5566;
-    --accent: #8b1a1a;
-    --accent-soft: #c0392b;
-    --rule: #d8d4cb;
-    --code-bg: #f4f1ec;
-    --table-head: #efe9df;
-    --table-stripe: #faf6ee;
-    --link: #1e5a8a;
-}
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", "MS Mincho", serif;
-    line-height: 1.85;
-    margin: 0;
-    padding: 0;
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-}
-
-.container {
-    max-width: 820px;
-    margin: 0 auto;
-    background: var(--paper);
-    padding: 56px 72px;
-    box-shadow: 0 0 40px rgba(0,0,0,0.06);
-    min-height: 100vh;
-}
-
-h1, h2, h3, h4 {
-    font-family: "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", "Meiryo", sans-serif;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--text);
-}
-
-h1 {
-    font-size: 1.7em;
-    border-bottom: 2px solid var(--accent);
-    padding-bottom: 12px;
-    margin: 0 0 24px 0;
-    line-height: 1.4;
-}
-
-h2 {
-    font-size: 1.35em;
-    color: var(--accent);
-    border-left: 5px solid var(--accent);
-    padding-left: 14px;
-    margin: 56px 0 20px 0;
-}
-
-h3 {
-    font-size: 1.13em;
-    color: var(--text);
-    margin: 36px 0 14px 0;
-    padding-bottom: 4px;
-    border-bottom: 1px dotted var(--rule);
-}
-
-h4 {
-    font-size: 1.02em;
-    color: var(--text-soft);
-    margin: 24px 0 10px 0;
-}
-
-p { margin: 12px 0; text-align: justify; }
-
-strong { color: var(--accent); font-weight: 600; }
-em { color: var(--text-soft); }
-
-a { color: var(--link); text-decoration: none; border-bottom: 1px dotted var(--link); }
-a:hover { border-bottom-style: solid; }
-
-hr {
-    border: none;
-    border-top: 1px solid var(--rule);
-    margin: 40px 0;
-}
-
-/* Lists */
-ul, ol { padding-left: 1.6em; margin: 12px 0; }
-li { margin: 6px 0; }
-
-/* Tables */
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin: 20px 0;
-    font-size: 0.93em;
-    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-}
-
-thead { background: var(--table-head); }
-
-th, td {
-    border: 1px solid var(--rule);
-    padding: 8px 12px;
-    text-align: left;
-}
-
-th { font-weight: 600; color: var(--text); }
-
-tbody tr:nth-child(even) { background: var(--table-stripe); }
-
-/* Code */
-code {
-    font-family: "JetBrains Mono", "Consolas", "Menlo", monospace;
-    background: var(--code-bg);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.88em;
-    color: #4b3a1f;
-}
-
-pre {
-    background: var(--code-bg);
-    border-left: 3px solid var(--accent-soft);
-    padding: 14px 18px;
-    overflow-x: auto;
-    border-radius: 4px;
-    font-size: 0.86em;
-    line-height: 1.55;
-}
-
-pre code {
-    background: none;
-    padding: 0;
-    color: var(--text);
-}
-
-/* Figure */
-figure {
-    margin: 28px auto;
-    text-align: center;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 20px auto;
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-figcaption, p > em:only-child {
-    font-size: 0.88em;
-    color: var(--text-soft);
-}
-
-/* Math */
-.MathJax { font-size: 1.0em !important; }
-mjx-container { overflow-x: auto; }
-mjx-container[display="true"] {
-    margin: 16px 0 !important;
-}
-
-/* Blockquote */
-blockquote {
-    border-left: 4px solid var(--accent-soft);
-    margin: 18px 0;
-    padding: 8px 18px;
-    background: #fdf6f3;
-    color: var(--text-soft);
-    font-style: italic;
-}
-
-/* Specific: 要旨 box */
-.abstract {
-    background: #f6f1e7;
-    border: 1px solid var(--rule);
-    padding: 20px 26px;
-    margin: 28px 0;
-    border-radius: 4px;
-}
-
-/* TOC */
-.toc {
-    background: #faf6ee;
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    padding: 18px 28px;
-    margin: 30px 0;
-    font-size: 0.93em;
-    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-}
-.toc h2 {
-    margin-top: 0;
-    border: none;
-    padding: 0;
-    font-size: 1.05em;
-    color: var(--accent);
-}
-.toc ul { padding-left: 1.4em; list-style: none; }
-.toc > ul { padding-left: 0; }
-.toc li::before { content: "▸ "; color: var(--accent-soft); margin-right: 4px; }
-.toc ul ul li::before { content: "・"; color: var(--text-soft); }
-.toc a { border: none; color: var(--text); }
-.toc a:hover { color: var(--accent); }
-
-/* Header meta */
-.meta {
-    color: var(--text-soft);
-    font-size: 0.95em;
-    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
-    margin: 0 0 36px 0;
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 18px;
-}
-.meta strong { color: var(--text); font-weight: 600; }
-
-/* Print */
-@media print {
-    body { background: white; }
-    .container { box-shadow: none; max-width: none; padding: 20mm; }
-    h2 { page-break-before: auto; page-break-after: avoid; }
-    h3, h4 { page-break-after: avoid; }
-    img, table { page-break-inside: avoid; }
-    pre { page-break-inside: avoid; }
-    .toc { page-break-after: always; }
-}
-
-/* Responsive */
-@media (max-width: 860px) {
-    .container { padding: 30px 22px; }
-    body { font-size: 15px; }
-}
-
-</style>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 </head>
 <body>
@@ -374,13 +133,13 @@ blockquote {
 <li><a href="#収束診断">6.1 収束診断</a></li>
 <li><a href="#bass-パラメータの事後分布">6.2 Bass パラメータの事後分布</a></li>
 <li><a href="#nbd-時変パラメータ">6.3 NBD 時変パラメータ</a></li>
-<li><a href="#閾値補正-p_textactivet">6.4 閾値補正 <span class="math inline">\(P_{\text{active}}(t)\)</span></a></li>
+<li><a href="#閾値補正-p_activet">6.4 閾値補正 P_active(t)</a></li>
 <li><a href="#事後予測">6.5 事後予測</a></li>
 <li><a href="#識別性の比較">6.6 識別性の比較</a></li>
 </ul></li>
 <li><a href="#議論">7. 議論</a>
 <ul>
-<li><a href="#構造変化点-c_2-approx-2014-の解釈スマートフォン代替仮説">7.1 構造変化点 <span class="math inline">\(c_2 \approx 2014\)</span> の解釈：スマートフォン代替仮説</a></li>
+<li><a href="#構造変化点-c₂-2014-の解釈スマートフォン代替仮説">7.1 構造変化点 c₂ ≈ 2014 の解釈：スマートフォン代替仮説</a></li>
 <li><a href="#市場濃縮化α-の減少と-eλ-の上昇">7.2 市場濃縮化：α の減少と E[λ] の上昇</a></li>
 <li><a href="#規制効果の検出可能性別ノートブックの検証結果">7.3 規制効果の検出可能性：別ノートブックの検証結果</a></li>
 <li><a href="#マーケサイエンス的解釈とマネジリアル含意">7.4 マーケサイエンス的解釈とマネジリアル含意</a></li>
@@ -413,8 +172,8 @@ blockquote {
 </ul></li>
 <li><a href="#付録-c識別性の数理">付録 C：識別性の数理</a>
 <ul>
-<li><a href="#c.1-m-と-at-の積分解性">C.1 <span class="math inline">\(M\)</span> と <span class="math inline">\(a(t)\)</span> の積分解性</a></li>
-<li><a href="#c.2-p_1-と-q_1-の構造的弱識別性">C.2 <span class="math inline">\(p_1\)</span> と <span class="math inline">\(q_1\)</span> の構造的弱識別性</a></li>
+<li><a href="#c.1-m-と-at-の積分解性">C.1 M と a(t) の積分解性</a></li>
+<li><a href="#c.2-p₁-と-q₁-の構造的弱識別性">C.2 p₁ と q₁ の構造的弱識別性</a></li>
 <li><a href="#c.3-nbd-bass-結合における識別性向上">C.3 NBD-Bass 結合における識別性向上</a></li>
 <li><a href="#c.4-識別性検証用シミュレーション">C.4 識別性検証用シミュレーション</a></li>
 </ul></li>
@@ -433,7 +192,7 @@ blockquote {
 </ul></li>
 <li><a href="#付録-f補足数値結果">付録 F：補足数値結果</a>
 <ul>
-<li><a href="#f.1-平均利用強度-mathbbelambdat-の年次表事後中央値">F.1 平均利用強度 <span class="math inline">\(\mathbb{E}[\lambda](t)\)</span> の年次表（事後中央値）</a></li>
+<li><a href="#f.1-平均利用強度-eλ-の年次表事後中央値">F.1 平均利用強度 E<span>λ</span> の年次表（事後中央値）</a></li>
 <li><a href="#f.2-規制ダミー版との比較参考">F.2 規制ダミー版との比較（参考）</a></li>
 <li><a href="#f.3-事前-vs-事後の縮約度">F.3 事前 vs 事後の縮約度</a></li>
 </ul></li>
@@ -918,7 +677,7 @@ blockquote {
 <img src="figs/fig07_nbd_posterior.png" alt="" /><figcaption>図 7: NBD 時変の事後</figcaption>
 </figure>
 <p><em>図 7</em>：<span class="math inline">\(r(t)\)</span>（左、青）と <span class="math inline">\(\alpha_{\text{nbd}}(t)\)</span>（中、赤）と <span class="math inline">\(P_{\text{active}}(t)\)</span>（右、緑）の事後分布。<span class="math inline">\(\alpha\)</span> が単調減少する一方、<span class="math inline">\(r\)</span> はほぼフラット。<span class="math inline">\(P_{\text{active}}(t)\)</span> は 85% 前後でゆるやかに変動。</p>
-<h3 id="閾値補正-p_textactivet">6.4 閾値補正 <span class="math inline">\(P_{\text{active}}(t)\)</span></h3>
+<h3 id="閾値補正-p_activet">6.4 閾値補正 P_active(t)</h3>
 <p><span class="math inline">\(P(X \ge 1 \mid r(t), \alpha(t))\)</span> の事後中央値は 2013 年で 0.852、つまり<strong>真のアクティブ層のうち 85% が「年 1 回以上」の閾値を超える</strong>。閾値下に隠れる割合は 15%。</p>
 <p>時系列的には、<span class="math inline">\(\alpha\)</span> が減少して <span class="math inline">\(P(X = 0) = (\alpha/(\alpha+1))^r\)</span> も減少するため、<span class="math inline">\(P_{\text{active}}\)</span> は緩やかに上昇する（2008 年 0.840 → 2019 年 0.865）。すなわち時間とともに「閾値による情報損失が小さくなる」方向にあり、これは「ライト層が抜けたあとに残ったプレイヤーがより active」という解釈と整合する。</p>
 <figure>
@@ -1014,7 +773,7 @@ blockquote {
 </ol>
 <hr />
 <h2 id="議論">7. 議論</h2>
-<h3 id="構造変化点-c_2-approx-2014-の解釈スマートフォン代替仮説">7.1 構造変化点 <span class="math inline">\(c_2 \approx 2014\)</span> の解釈：スマートフォン代替仮説</h3>
+<h3 id="構造変化点-c₂-2014-の解釈スマートフォン代替仮説">7.1 構造変化点 c₂ ≈ 2014 の解釈：スマートフォン代替仮説</h3>
 <p>本研究の最も頑健な発見は、離脱率 <span class="math inline">\(p_2(t)\)</span> のガウスピーク中心が <span class="math inline">\(c_2 = 2014.0\)</span>（95%CI [2010, 2018]）で推定されたことである。この結果は、(i) NBD 単独版（<span class="math inline">\(c_2 = 2015\)</span>）、(ii) 従来 <span class="math inline">\(q_2 = 0\)</span> 版（<span class="math inline">\(c_2 = 2014\)</span>）、(iii) 規制ダミー版（<span class="math inline">\(c_2 = 2013.3\)</span>）、いずれにおいても 2013–2015 年のいずれかに収束する<strong>極めて頑健な構造変化点</strong>である。</p>
 <p>この時期は、日本におけるスマートフォンの普及がティッピングポイントを越えた時期と一致する：</p>
 <ul>
@@ -1133,10 +892,10 @@ p_1 + q_1 a &amp; q_1 s + \alpha q_1 x - p_2 &amp; \alpha(p_1 + q_1 a) \\
 <p>DifferentialEquations.jl の <code>Tsit5</code> を用いた。Tsitouras (2011) の 5(4) 次 Runge-Kutta 法は、滑らかな非剛性問題に対して効率的。本問題は剛性パラメータ（<span class="math inline">\(p_2 / p_1\)</span> の比など）が高々 10 程度であり、stiff solver は不要。<code>abstol = reltol = 1e-6</code> で十分な精度を確保。</p>
 <hr />
 <h2 id="付録-c識別性の数理">付録 C：識別性の数理</h2>
-<h3 id="c.1-m-と-at-の積分解性">C.1 <span class="math inline">\(M\)</span> と <span class="math inline">\(a(t)\)</span> の積分解性</h3>
+<h3 id="c.1-m-と-at-の積分解性">C.1 M と a(t) の積分解性</h3>
 <p>観測モデルは <span class="math display">\[\mathbb{E}[A_{\text{obs}}(t)] = M \cdot a(t) \cdot P_{\text{active}}(t).\]</span> <span class="math inline">\(M\)</span> と <span class="math inline">\(a(t)\)</span> の積は識別されるが、個別には識別されない（<span class="math inline">\(M \to \lambda M\)</span>, <span class="math inline">\(a \to a/\lambda\)</span> で観測尤度不変）。本研究は Bass ODE が <span class="math inline">\(u(0) = (1 - a_0, a_0, 0)\)</span> という初期条件を持つことで <span class="math inline">\(a(t)\)</span> のスケールが固定され、<span class="math inline">\(M\)</span> も識別される構造になっている。</p>
 <p>ただしこの初期条件依存性は脆弱で、<span class="math inline">\(a_0\)</span> の事前分布が広いと <span class="math inline">\(M\)</span> も拡散する。本研究では <span class="math inline">\(a_0 = A_{\text{obs}}(1994)/2500\)</span> という観測ベースの定値を採用しており、これが識別性を強化する一方、<span class="math inline">\(a_0\)</span> の真値が異なれば <span class="math inline">\(M\)</span> にバイアスが入る。</p>
-<h3 id="c.2-p_1-と-q_1-の構造的弱識別性">C.2 <span class="math inline">\(p_1\)</span> と <span class="math inline">\(q_1\)</span> の構造的弱識別性</h3>
+<h3 id="c.2-p₁-と-q₁-の構造的弱識別性">C.2 p₁ と q₁ の構造的弱識別性</h3>
 <p><span class="math inline">\(p_1(t) + q_1 a(t)\)</span> は積分時間として小さい場合（<span class="math inline">\(a \ll 1\)</span>）には事実上 <span class="math inline">\(p_1\)</span> のみで決まり、<span class="math inline">\(a\)</span> が中等の場合に <span class="math inline">\(q_1\)</span> が効く。Bass 1969 の元の議論でも <span class="math inline">\(p, q\)</span> の同時識別は <span class="math inline">\((p+q)\)</span> と <span class="math inline">\(q/p\)</span> の組合せで進めるのが慣行的だった。本研究も <span class="math inline">\(p_1, q_1\)</span> の同時識別は弱く、<span class="math inline">\(p_1 + q_1 \cdot \bar a\)</span> (where <span class="math inline">\(\bar a\)</span> is the time-averaged active fraction) が比較的識別される。</p>
 <h3 id="c.3-nbd-bass-結合における識別性向上">C.3 NBD-Bass 結合における識別性向上</h3>
 <p>頻度ビン観測は <span class="math inline">\(r, \alpha\)</span> のみの関数で Bass パラメータと独立であるため、NBD の事後分布は Bass 部分の不確実性に影響されない。これが本研究のキー識別メカニズムであり、<span class="math inline">\(P_{\text{active}}(t)\)</span> を独立に推定することで <span class="math inline">\(M \cdot a(t)\)</span> の積分解性を緩和する。</p>
@@ -1313,7 +1072,7 @@ p_1 + q_1 a &amp; q_1 s + \alpha q_1 x - p_2 &amp; \alpha(p_1 + q_1 a) \\
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>               initial_params<span class="op">=</span>fill(init_vals<span class="op">,</span> <span class="fl">4</span>))</span></code></pre></div>
 <hr />
 <h2 id="付録-f補足数値結果">付録 F：補足数値結果</h2>
-<h3 id="f.1-平均利用強度-mathbbelambdat-の年次表事後中央値">F.1 平均利用強度 <span class="math inline">\(\mathbb{E}[\lambda](t)\)</span> の年次表（事後中央値）</h3>
+<h3 id="f.1-平均利用強度-eλ-の年次表事後中央値">F.1 平均利用強度 E<a href="t">λ</a> の年次表（事後中央値）</h3>
 <table>
 <thead>
 <tr class="header">
