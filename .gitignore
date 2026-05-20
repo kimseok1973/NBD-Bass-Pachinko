@@ -1,0 +1,89 @@
+# ─────────────────────────────
+# Julia
+# ─────────────────────────────
+*.jl.cov
+*.jl.*.cov
+*.jl.mem
+deps/deps.jl
+docs/build/
+docs/site/
+Manifest.toml
+# Keep Project.toml committed; ignore Manifest for reproducibility flexibility
+LocalPreferences.toml
+
+# ─────────────────────────────
+# Jupyter
+# ─────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+# Keep outputs in main notebooks; ignore autosave variants
+*-checkpoint.ipynb
+
+# ─────────────────────────────
+# Python (for any Python helpers)
+# ─────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+venv/
+.venv/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+
+# ─────────────────────────────
+# Editors / IDEs
+# ─────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ─────────────────────────────
+# OS / system
+# ─────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─────────────────────────────
+# Output / temporary
+# ─────────────────────────────
+*.log
+*.tmp
+*.bak
+*.cache
+output/
+cache/
+
+# ─────────────────────────────
+# Large posterior files (regenerable)
+# ─────────────────────────────
+chains/*.jls
+chains/*.h5
+posterior_samples/
+*.h5
+
+# ─────────────────────────────
+# Local pandoc / build artifacts
+# ─────────────────────────────
+paper/paper_raw.html
+paper/*.bak
+paper/.aux
+paper/.log
+paper/.out
+
+# ─────────────────────────────
+# Secret / config (just in case)
+# ─────────────────────────────
+.env
+.env.local
+secrets.toml
+*.key
+*.pem

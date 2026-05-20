@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this software or research, please cite it as follows."
+title: "NBD-Bass-Pachinko: Threshold-Adjusted Diffusion Dynamics for Japan's Pachinko Market"
+version: "1.0.0"
+date-released: "2026-05-20"
+authors:
+  - family-names: "Kim"
+    given-names: "Tetsu"
+    alias: "kimseok1973"
+repository-code: "https://github.com/kimseok1973/NBD-Bass-Pachinko"
+license: "MIT"
+license-url: "https://opensource.org/licenses/MIT"
+abstract: >
+  A hierarchical Bayesian framework integrating Bass diffusion model and
+  Negative Binomial Distribution (NBD) frequency model for analyzing market
+  participation under threshold observation. Applied to Japan's pachinko market
+  participation data (1994-2019), the model identifies a robust structural
+  change in churn rate around 2014 (smartphone diffusion era), quantifies the
+  "market concentration" effect through decreasing NBD scale parameter, and
+  estimates the true latent player pool size after threshold correction.
+keywords:
+  - Bass diffusion model
+  - Negative binomial distribution
+  - Hierarchical Bayesian inference
+  - Threshold observation
+  - Market dynamics
+  - Pachinko market
+  - Smartphone substitution
+  - Markov chain Monte Carlo
+  - Turing.jl
+preferred-citation:
+  type: generic
+  title: "Threshold-Adjusted Diffusion Dynamics: A Joint NBD-Bass Bayesian Model for Japan's Pachinko Market"
+  authors:
+    - family-names: "Kim"
+      given-names: "Tetsu"
+  year: 2026
+  url: "https://github.com/kimseok1973/NBD-Bass-Pachinko"

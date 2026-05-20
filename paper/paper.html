@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>閾値観測下の市場拡散動態：NBD-Bass 統合ベイズモデルによる日本パチンコ市場の構造変化分析</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <style>
+:root {
+    --bg: #fafaf7;
+    --paper: #ffffff;
+    --text: #1f2530;
+    --text-soft: #4a5566;
+    --accent: #8b1a1a;
+    --accent-soft: #c0392b;
+    --rule: #d8d4cb;
+    --code-bg: #f4f1ec;
+    --table-head: #efe9df;
+    --table-stripe: #faf6ee;
+    --link: #1e5a8a;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", "MS Mincho", serif;
+    line-height: 1.85;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    max-width: 820px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 56px 72px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.06);
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+    font-family: "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans JP", "Meiryo", sans-serif;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--text);
+}
+
+h1 {
+    font-size: 1.7em;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 12px;
+    margin: 0 0 24px 0;
+    line-height: 1.4;
+}
+
+h2 {
+    font-size: 1.35em;
+    color: var(--accent);
+    border-left: 5px solid var(--accent);
+    padding-left: 14px;
+    margin: 56px 0 20px 0;
+}
+
+h3 {
+    font-size: 1.13em;
+    color: var(--text);
+    margin: 36px 0 14px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px dotted var(--rule);
+}
+
+h4 {
+    font-size: 1.02em;
+    color: var(--text-soft);
+    margin: 24px 0 10px 0;
+}
+
+p { margin: 12px 0; text-align: justify; }
+
+strong { color: var(--accent); font-weight: 600; }
+em { color: var(--text-soft); }
+
+a { color: var(--link); text-decoration: none; border-bottom: 1px dotted var(--link); }
+a:hover { border-bottom-style: solid; }
+
+hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 40px 0;
+}
+
+/* Lists */
+ul, ol { padding-left: 1.6em; margin: 12px 0; }
+li { margin: 6px 0; }
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 0.93em;
+    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+}
+
+thead { background: var(--table-head); }
+
+th, td {
+    border: 1px solid var(--rule);
+    padding: 8px 12px;
+    text-align: left;
+}
+
+th { font-weight: 600; color: var(--text); }
+
+tbody tr:nth-child(even) { background: var(--table-stripe); }
+
+/* Code */
+code {
+    font-family: "JetBrains Mono", "Consolas", "Menlo", monospace;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #4b3a1f;
+}
+
+pre {
+    background: var(--code-bg);
+    border-left: 3px solid var(--accent-soft);
+    padding: 14px 18px;
+    overflow-x: auto;
+    border-radius: 4px;
+    font-size: 0.86em;
+    line-height: 1.55;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+}
+
+/* Figure */
+figure {
+    margin: 28px auto;
+    text-align: center;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+figcaption, p > em:only-child {
+    font-size: 0.88em;
+    color: var(--text-soft);
+}
+
+/* Math */
+.MathJax { font-size: 1.0em !important; }
+mjx-container { overflow-x: auto; }
+mjx-container[display="true"] {
+    margin: 16px 0 !important;
+}
+
+/* Blockquote */
+blockquote {
+    border-left: 4px solid var(--accent-soft);
+    margin: 18px 0;
+    padding: 8px 18px;
+    background: #fdf6f3;
+    color: var(--text-soft);
+    font-style: italic;
+}
+
+/* Specific: 要旨 box */
+.abstract {
+    background: #f6f1e7;
+    border: 1px solid var(--rule);
+    padding: 20px 26px;
+    margin: 28px 0;
+    border-radius: 4px;
+}
+
+/* TOC */
+.toc {
+    background: #faf6ee;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 28px;
+    margin: 30px 0;
+    font-size: 0.93em;
+    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+}
+.toc h2 {
+    margin-top: 0;
+    border: none;
+    padding: 0;
+    font-size: 1.05em;
+    color: var(--accent);
+}
+.toc ul { padding-left: 1.4em; list-style: none; }
+.toc > ul { padding-left: 0; }
+.toc li::before { content: "▸ "; color: var(--accent-soft); margin-right: 4px; }
+.toc ul ul li::before { content: "・"; color: var(--text-soft); }
+.toc a { border: none; color: var(--text); }
+.toc a:hover { color: var(--accent); }
+
+/* Header meta */
+.meta {
+    color: var(--text-soft);
+    font-size: 0.95em;
+    font-family: "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+    margin: 0 0 36px 0;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 18px;
+}
+.meta strong { color: var(--text); font-weight: 600; }
+
+/* Print */
+@media print {
+    body { background: white; }
+    .container { box-shadow: none; max-width: none; padding: 20mm; }
+    h2 { page-break-before: auto; page-break-after: avoid; }
+    h3, h4 { page-break-after: avoid; }
+    img, table { page-break-inside: avoid; }
+    pre { page-break-inside: avoid; }
+    .toc { page-break-after: always; }
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+    .container { padding: 30px 22px; }
+    body { font-size: 15px; }
+}
+
+</style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="container">
+<header id="title-block-header">
+<h1 class="title">閾値観測下の市場拡散動態：NBD-Bass 統合ベイズモデルによる日本パチンコ市場の構造変化分析</h1>
+<div class="meta">
+<strong>著者：</strong>Tetsu Kim　|　<strong>日付：</strong>2026年5月20日<br>
+<strong>キーワード：</strong>Bass 拡散モデル, 負の二項分布（NBD）, 階層ベイズ, 閾値観測, 市場ダイナミクス, パチンコ市場, スマートフォン代替, MCMC
+</div>
+</header>
+<nav id="TOC" role="doc-toc" class="toc"><h2>目次</h2>
+<ul>
+<li><a href="#閾値観測下の市場拡散動態nbd-bass-統合ベイズモデルによる日本パチンコ市場の構造変化分析">閾値観測下の市場拡散動態：NBD-Bass 統合ベイズモデルによる日本パチンコ市場の構造変化分析</a>
+<ul>
+<li><a href="#要旨">要旨</a></li>
+<li><a href="#はじめに">1. はじめに</a>
+<ul>
+<li><a href="#研究の背景">1.1 研究の背景</a></li>
+<li><a href="#閾値観測がもたらす識別問題">1.2 閾値観測がもたらす識別問題</a></li>
+<li><a href="#既存研究の限界">1.3 既存研究の限界</a></li>
+<li><a href="#本研究の貢献">1.4 本研究の貢献</a></li>
+<li><a href="#論文の構成">1.5 論文の構成</a></li>
+</ul></li>
+<li><a href="#関連研究">2. 関連研究</a>
+<ul>
+<li><a href="#bass-拡散モデルとその拡張">2.1 Bass 拡散モデルとその拡張</a></li>
+<li><a href="#nbd-系顧客頻度モデル">2.2 NBD 系顧客頻度モデル</a></li>
+<li><a href="#閾値観測下の推定">2.3 閾値観測下の推定</a></li>
+<li><a href="#日本パチンコ市場の先行研究">2.4 日本パチンコ市場の先行研究</a></li>
+</ul></li>
+<li><a href="#モデル">3. モデル</a>
+<ul>
+<li><a href="#個人レベル-時変-nbd-頻度モデル">3.1 個人レベル: 時変 NBD 頻度モデル</a></li>
+<li><a href="#集団レベル-3-状態-bass-拡張-ode">3.2 集団レベル: 3 状態 Bass 拡張 ODE</a></li>
+<li><a href="#観測モデル-二重尤度">3.3 観測モデル: 二重尤度</a></li>
+<li><a href="#全尤度">3.4 全尤度</a></li>
+<li><a href="#識別性の議論">3.5 識別性の議論</a></li>
+</ul></li>
+<li><a href="#データ">4. データ</a>
+<ul>
+<li><a href="#パチンコ参加人口観測-1">4.1 パチンコ参加人口（観測 1）</a></li>
+<li><a href="#頻度分布調査観測-2">4.2 頻度分布調査（観測 2）</a></li>
+<li><a href="#補助変数">4.3 補助変数</a></li>
+<li><a href="#データサンプリング上の留意点">4.4 データ・サンプリング上の留意点</a></li>
+</ul></li>
+<li><a href="#推定手法">5. 推定手法</a>
+<ul>
+<li><a href="#ベイズ階層モデル">5.1 ベイズ階層モデル</a></li>
+<li><a href="#mcmc-設定">5.2 MCMC 設定</a></li>
+<li><a href="#初期化">5.3 初期化</a></li>
+<li><a href="#数値安定性">5.4 数値安定性</a></li>
+</ul></li>
+<li><a href="#結果">6. 結果</a>
+<ul>
+<li><a href="#収束診断">6.1 収束診断</a></li>
+<li><a href="#bass-パラメータの事後分布">6.2 Bass パラメータの事後分布</a></li>
+<li><a href="#nbd-時変パラメータ">6.3 NBD 時変パラメータ</a></li>
+<li><a href="#閾値補正-p_textactivet">6.4 閾値補正 <span class="math inline">\(P_{\text{active}}(t)\)</span></a></li>
+<li><a href="#事後予測">6.5 事後予測</a></li>
+<li><a href="#識別性の比較">6.6 識別性の比較</a></li>
+</ul></li>
+<li><a href="#議論">7. 議論</a>
+<ul>
+<li><a href="#構造変化点-c_2-approx-2014-の解釈スマートフォン代替仮説">7.1 構造変化点 <span class="math inline">\(c_2 \approx 2014\)</span> の解釈：スマートフォン代替仮説</a></li>
+<li><a href="#市場濃縮化α-の減少と-eλ-の上昇">7.2 市場濃縮化：α の減少と E[λ] の上昇</a></li>
+<li><a href="#規制効果の検出可能性別ノートブックの検証結果">7.3 規制効果の検出可能性：別ノートブックの検証結果</a></li>
+<li><a href="#マーケサイエンス的解釈とマネジリアル含意">7.4 マーケサイエンス的解釈とマネジリアル含意</a></li>
+</ul></li>
+<li><a href="#限界と今後の研究">8. 限界と今後の研究</a>
+<ul>
+<li><a href="#データ観測面の限界">8.1 データ・観測面の限界</a></li>
+<li><a href="#モデル仕様面の限界">8.2 モデル仕様面の限界</a></li>
+<li><a href="#今後の研究方向">8.3 今後の研究方向</a></li>
+</ul></li>
+<li><a href="#結論">9. 結論</a></li>
+<li><a href="#謝辞">謝辞</a></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul></li>
+<li><a href="#付録">付録</a>
+<ul>
+<li><a href="#付録-anbd-の導出と性質">付録 A：NBD の導出と性質</a>
+<ul>
+<li><a href="#a.1-gamma-poisson-混合としての-nbd">A.1 Gamma-Poisson 混合としての NBD</a></li>
+<li><a href="#a.2-主要な統計量">A.2 主要な統計量</a></li>
+<li><a href="#a.3-本研究の点推定値-2013年">A.3 本研究の点推定値 (2013年)</a></li>
+<li><a href="#a.4-nbd-ビン確率の計算">A.4 NBD ビン確率の計算</a></li>
+</ul></li>
+<li><a href="#付録-b3-状態-ode-の解析的性質">付録 B：3 状態 ODE の解析的性質</a>
+<ul>
+<li><a href="#b.1-質量保存">B.1 質量保存</a></li>
+<li><a href="#b.2-平衡解">B.2 平衡解</a></li>
+<li><a href="#b.3-ヤコビアン">B.3 ヤコビアン</a></li>
+<li><a href="#b.4-数値解法">B.4 数値解法</a></li>
+</ul></li>
+<li><a href="#付録-c識別性の数理">付録 C：識別性の数理</a>
+<ul>
+<li><a href="#c.1-m-と-at-の積分解性">C.1 <span class="math inline">\(M\)</span> と <span class="math inline">\(a(t)\)</span> の積分解性</a></li>
+<li><a href="#c.2-p_1-と-q_1-の構造的弱識別性">C.2 <span class="math inline">\(p_1\)</span> と <span class="math inline">\(q_1\)</span> の構造的弱識別性</a></li>
+<li><a href="#c.3-nbd-bass-結合における識別性向上">C.3 NBD-Bass 結合における識別性向上</a></li>
+<li><a href="#c.4-識別性検証用シミュレーション">C.4 識別性検証用シミュレーション</a></li>
+</ul></li>
+<li><a href="#付録-d事前分布の感度分析と収束診断">付録 D：事前分布の感度分析と収束診断</a>
+<ul>
+<li><a href="#d.1-事前分布の感度">D.1 事前分布の感度</a></li>
+<li><a href="#d.2-収束診断">D.2 収束診断</a></li>
+<li><a href="#d.3-事後予測検証">D.3 事後予測検証</a></li>
+</ul></li>
+<li><a href="#付録-e実装コードturing.jl-抜粋">付録 E：実装コード（Turing.jl 抜粋）</a>
+<ul>
+<li><a href="#e.1-nbd-ヘルパー">E.1 NBD ヘルパー</a></li>
+<li><a href="#e.2-bass-3-状態-ode">E.2 Bass 3 状態 ODE</a></li>
+<li><a href="#e.3-turing-モデル定義">E.3 Turing モデル定義</a></li>
+<li><a href="#e.4-mcmc-実行">E.4 MCMC 実行</a></li>
+</ul></li>
+<li><a href="#付録-f補足数値結果">付録 F：補足数値結果</a>
+<ul>
+<li><a href="#f.1-平均利用強度-mathbbelambdat-の年次表事後中央値">F.1 平均利用強度 <span class="math inline">\(\mathbb{E}[\lambda](t)\)</span> の年次表（事後中央値）</a></li>
+<li><a href="#f.2-規制ダミー版との比較参考">F.2 規制ダミー版との比較（参考）</a></li>
+<li><a href="#f.3-事前-vs-事後の縮約度">F.3 事前 vs 事後の縮約度</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="閾値観測下の市場拡散動態nbd-bass-統合ベイズモデルによる日本パチンコ市場の構造変化分析">閾値観測下の市場拡散動態：NBD-Bass 統合ベイズモデルによる日本パチンコ市場の構造変化分析</h1>
+<p><strong>著者</strong>: Tetsu Kim <strong>所属</strong>: ― <strong>日付</strong>: 2026年5月20日 <strong>Keywords</strong>: Bass 拡散モデル, 負の二項分布（NBD）, 階層ベイズ, 閾値観測, 市場ダイナミクス, パチンコ市場, スマートフォン代替, MCMC</p>
+<hr />
+<h2 id="要旨">要旨</h2>
+<p>本稿は、年1回以上利用という閾値観測（threshold observation）の下で市場参加人口が記録される耐久財・サービス市場において、Bass 拡散モデル (Bass, 1969) と負の二項分布 (Negative Binomial Distribution; NBD; Ehrenberg, 1959) を統合する階層ベイズ枠組みを提案する。閾値観測は「真の離脱」と「低頻度化による閾値下落」を混同し、Bass の参入率 <span class="math inline">\(p_1\)</span> と離脱率 <span class="math inline">\(p_2\)</span> の識別性を構造的に毀損する。本稿は、(i) 個人の年間遊戯頻度 <span class="math inline">\(X_i\)</span> を時変 NBD<span class="math inline">\((r(t),\alpha(t))\)</span> で表現し、(ii) 集団動態を 3 状態（潜在 <span class="math inline">\(s\)</span>、アクティブ <span class="math inline">\(a\)</span>、離脱 <span class="math inline">\(x\)</span>）の Bass 拡張 ODE で記述し、(iii) 年次参加人口（<span class="math inline">\(N=26\)</span>、1994–2019）と頻度ビン分布（<span class="math inline">\(N=9\)</span> 年、各 1500 標本）の二重尤度として尤度関数を構成する 16 パラメータのモデルを構築する。日本パチンコ市場のデータに本モデルを適用した結果、<span class="math inline">\(\hat{R}\le 1.006\)</span>、有効標本サイズ <span class="math inline">\(&gt; 700\)</span> で安定収束し、(a) スマートフォン普及期に対応する離脱率の構造変化点 <span class="math inline">\(c_2 = 2014.0\)</span> [95%信用区間 (CI): 2010, 2018]、(b) NBD 形状パラメータ <span class="math inline">\(r\)</span> の時変なし／<span class="math inline">\(\alpha\)</span> の年率 <span class="math inline">\(-2.2\%\)</span>（log 単位）の有意な減少、これに伴う平均遊戯頻度 <span class="math inline">\(\mathbb{E}[\lambda]\)</span> の上昇（2008 年 59 回/年 → 2019 年 74 回/年）、(c) 真の潜在アクティブ層の約 15% が閾値下に隠れていること、を見いだした。識別性の指標 CI/med は、従来の閾値観測ベース版に対し <span class="math inline">\(p_{2,\text{base}}\)</span> で 1.34 → 0.69、<span class="math inline">\(A_2\)</span> で 2.40 → 1.15 に改善した。本研究は、Bass 系拡散モデルに NBD 閾値補正を組み込む一般枠組みを提示するとともに、日本娯楽市場の「薄い層が抜けて残った層が濃くなる」構造変化を定量化する。</p>
+<hr />
+<h2 id="はじめに">1. はじめに</h2>
+<h3 id="研究の背景">1.1 研究の背景</h3>
+<p>日本のパチンコ市場は、過去 25 年で参加人口が 2930 万人（1994 年）から 890 万人（2019 年）へと 70% 減少した、極めて急激な縮小市場である（レジャー白書, 各年版; 図 1）。同期間、ホール（店舗）数は 18,113 から 9,639 へと 47% 減少し、業界の総売上規模も大きく縮小した。一方、設置台あたりの稼働や 1 台あたり粗利は逆に上昇傾向にあり、「市場は縮小しているが、残ったプレイヤーの密度は濃くなっている」という、単なる市場の縮退では説明できない構造変化が観察されている。</p>
+<p>このような縮小市場における動態を分析する自然な枠組みは、新規採用とコミュニケーションによる伝播を捉える Bass (1969) 拡散モデル、特にその離脱を含む拡張形である。しかし本稿の出発点である問題意識は、Bass の標準推定がパチンコ市場のような<strong>閾値観測下</strong>では識別性を構造的に欠くという点にある。レジャー白書の「パチンコ参加人口」は、「過去 1 年間に 1 回以上パチンコをした人」と定義される。これは個人レベルの遊戯頻度 <span class="math inline">\(X_i\)</span> について <span class="math inline">\(X_i \ge 1\)</span> という閾値で集計したカウントであり、市場の真のアクティブ層全体ではない。</p>
+<figure>
+<img src="figs/fig01_overview.png" alt="" /><figcaption>図 1: 日本パチンコ市場の長期推移 (1989–2019)</figcaption>
+</figure>
+<p><em>図 1</em>：左軸はパチンコ参加人口（万人、1994 年以降観測）、右軸はホール数。1994 年 2930 万人 → 2019 年 890 万人へと約 70% 減少した一方、参加 1 人あたり消費（売上 / 参加人口）はむしろ増加した。垂直点線は本稿で検討した 3 つの外生イベント（2006 年 5 号機ショック、2011 年東日本大震災、2018 年新基準機規制）。</p>
+<h3 id="閾値観測がもたらす識別問題">1.2 閾値観測がもたらす識別問題</h3>
+<p>参加人口 <span class="math inline">\(A_{\text{obs}}(t)\)</span> を直接 Bass モデルのアクティブ状態 <span class="math inline">\(a(t)\)</span> と同一視して尤度関数を組むと、次の構造的バイアスが生じる：</p>
+<ol type="1">
+<li><strong>離脱率の過大評価</strong>：真には「年に 1 度だけ遊技する低頻度プレイヤー」が「2 年に 1 度」になっただけでも、観測上は「離脱」として記録される。</li>
+<li><strong>構造変化点の歪み</strong>：頻度分布の重心がシフトする時期と、真の離脱が起こる時期が異なる場合、推定された <span class="math inline">\(c_2\)</span> はその合成位置にバイアスする。</li>
+<li><strong>市場規模 <span class="math inline">\(M\)</span> の過小推定</strong>：閾値下の低頻度プレイヤーが集計から除外されるため、潜在的なプレイヤープールが過小評価される。</li>
+</ol>
+<p>この問題は他の閾値ベース観測でも同様に発生する。例えば「月 1 回以上のフィットネスジム利用者」「週 1 回以上のニュースアプリアクティブユーザー」「年 1 回以上の銀行支店来店者」など、ビジネス指標は閾値で定義されることが多く、Bass や Hazard モデルを直接適用すると同型のバイアスを内包する。</p>
+<h3 id="既存研究の限界">1.3 既存研究の限界</h3>
+<p>Bass 系拡散モデルの推定では、観測アクティブ数を <span class="math inline">\(M \cdot a(t)\)</span> と同一視する標準的アプローチが慣行的に採られ、閾値補正は明示的に扱われない（Mahajan, Muller and Wind, 2000 によるレビュー）。一方、NBD ベースの顧客頻度モデル（Schmittlein, Morrison and Colombo, 1987; Fader, Hardie and Lee, 2005, BG/NBD）は個人レベルの取引頻度を扱うが、集団レベルの拡散ダイナミクスは内生化していない。両者を結ぶ自然な道は、<strong>Bass のアクティブ状態 <span class="math inline">\(a(t)\)</span> と NBD のヘテロジニアスな利用強度を同時推定する階層ベイズモデル</strong>であるが、その実装と識別性の検討は限定的である。</p>
+<h3 id="本研究の貢献">1.4 本研究の貢献</h3>
+<p>本稿の貢献は次の 4 点にまとめられる。</p>
+<p><strong>(C1) 統合モデルの定式化</strong>：個人レベルの NBD と集団レベルの 3 状態 Bass ODE を、二重尤度（参加人口 + 頻度ビン）で結合する 16 パラメータ階層ベイズモデルを Turing.jl で実装した。NUTS サンプラーで全パラメータの <span class="math inline">\(\hat{R} \le 1.006\)</span> を達成した。</p>
+<p><strong>(C2) 構造変化点の頑健な検出</strong>：離脱率 <span class="math inline">\(p_2(t)\)</span> のガウス摂動の中心 <span class="math inline">\(c_2\)</span> は、関数形・規制ダミー化・モデル仕様の変動に対して頑健に <span class="math inline">\(c_2 \approx 2014\)</span> で推定された。これは日本におけるスマートフォン普及（普及率 50% を超えた時期は 2013–2014 年）と整合しており、「娯楽の時間配分競争でパチンコがスマホに負けた」というナラティブの定量的裏付けである。</p>
+<p><strong>(C3) NBD 形状の時変構造の発見</strong>：頻度ビンデータから、形状パラメータ <span class="math inline">\(r\)</span> は時変的に変化せず、スケールパラメータ <span class="math inline">\(\alpha\)</span> のみが対数線形に減少していること（年率 <span class="math inline">\(-2.2\%\)</span>、95%CI: <span class="math inline">\([-3.8\%, -0.6\%]\)</span>）を見出した。これは「中央分布の縮退ではなく、低頻度層が大きく薄くなる」という方向の市場濃縮化を示唆する。</p>
+<p><strong>(C4) 識別性の定量的改善</strong>：従来の閾値観測ベース推定と比較し、<span class="math inline">\(p_{2,\text{base}}\)</span> の 95%CI/median 比は 1.34 から 0.69 へ、<span class="math inline">\(A_2\)</span>（離脱率振幅）は 2.40 から 1.15 へ、観測ノイズ <span class="math inline">\(\sigma\)</span> は 0.69 から 0.35 へとそれぞれ改善した。</p>
+<h3 id="論文の構成">1.5 論文の構成</h3>
+<p>第 2 章で Bass 系拡散モデル、NBD 顧客モデル、閾値観測下の推定問題に関する既存研究を整理する。第 3 章でモデルを定式化し、第 4 章でデータを記述する。第 5 章で推定手法、第 6 章で結果を提示し、第 7 章で構造変化のマーケサイエンス的解釈を議論する。第 8 章で限界、第 9 章で結論。付録 A–F に数学的詳細、感度分析、コードを収録する。</p>
+<hr />
+<h2 id="関連研究">2. 関連研究</h2>
+<h3 id="bass-拡散モデルとその拡張">2.1 Bass 拡散モデルとその拡張</h3>
+<p>Bass (1969) は、新製品の累積採用比率 <span class="math inline">\(F(t)\)</span> が次の常微分方程式に従うとした： <span class="math display">\[\frac{dF}{dt} = (p + qF)(1 - F),\]</span> ここで <span class="math inline">\(p\)</span> は外部影響（広告等）による採用率、<span class="math inline">\(q\)</span> は内部影響（口コミ）による採用率である。閉形解 <span class="math display">\[F(t) = \frac{1 - e^{-(p+q)t}}{1 + (q/p) e^{-(p+q)t}}\]</span> は典型的な S 字曲線を生成し、過去 50 年で数百の実証研究に応用された (Mahajan, Muller and Wind, 2000)。</p>
+<p>Bass モデルの基本仮定の一つは「採用は不可逆」、すなわち <span class="math inline">\(F(t)\)</span> は単調増加することである。しかしパチンコのような繰り返し利用財／サービスでは、採用後の離脱（churn）が頻繁に起こる。これを扱うため、SIR 型の疫学モデルに着想を得て、状態を <strong>潜在 <span class="math inline">\(s\)</span> – アクティブ <span class="math inline">\(a\)</span> – 離脱 <span class="math inline">\(x\)</span></strong> の 3 つに拡張する定式化が用いられる： <span class="math display">\[\frac{ds}{dt} = -(p_1 + q_1 a)\,s,\quad \frac{da}{dt} = (p_1 + q_1 a)\,s - p_2\,a,\quad \frac{dx}{dt} = p_2\,a.\]</span> <span class="math inline">\(p_1\)</span> が参入率、<span class="math inline">\(p_2\)</span> が離脱率、<span class="math inline">\(q_1\)</span> が口コミ係数である。再加入を許容する場合は離脱状態から潜在状態への戻りフロー <span class="math inline">\(\alpha (p_1 + q_1 a)\,x\)</span> を加える。</p>
+<h3 id="nbd-系顧客頻度モデル">2.2 NBD 系顧客頻度モデル</h3>
+<p>Ehrenberg (1959) の Dirichlet-NBD 枠組み以来、消費者の購買頻度を Poisson、その強度を Gamma で混合する負の二項分布 (NBD) モデルは、マーケサイエンスで広く採用されてきた。NBD の確率質量関数は <span class="math display">\[P(X = k \mid r, \alpha) = \frac{\Gamma(r+k)}{\Gamma(r)\,k!}\left(\frac{\alpha}{\alpha+1}\right)^r \left(\frac{1}{\alpha+1}\right)^k\]</span> で表され、<span class="math inline">\(r\)</span> は形状（heterogeneity index）、<span class="math inline">\(\alpha\)</span> は rate（逆スケール）である。集団平均は <span class="math inline">\(\mathbb{E}[\lambda] = r/\alpha\)</span>、分散は <span class="math inline">\(r/\alpha^2\)</span>。</p>
+<p>Schmittlein, Morrison and Colombo (1987) の Pareto/NBD、Fader, Hardie and Lee (2005) の BG/NBD は、NBD に「離脱」を確率的に加えたモデルとして、CLV 推定の標準手法となっている。しかしこれらは個人購買履歴を要するため、本稿が扱う「年次集計データ＋頻度ビン調査」のような集計データには適用しにくい。</p>
+<h3 id="閾値観測下の推定">2.3 閾値観測下の推定</h3>
+<p>打ち切り (censoring) を伴う観測の扱いは、生存時間解析や品質管理で長く議論されてきた (Tsiatis, 1981)。マーケサイエンスでは、観測アクティブ数が閾値で定義されることに起因するバイアスを明示的に扱う研究は限られる。Reinartz and Kumar (2003) は CLV モデルでアクティブ状態の確率的判定を導入したが、Bass 系の集団動態とは結合していない。本稿はこの空白を埋める試みである。</p>
+<h3 id="日本パチンコ市場の先行研究">2.4 日本パチンコ市場の先行研究</h3>
+<p>日本のパチンコ市場については、業界統計の記述的分析（遊技業界データブック, 日遊協）と、ギャンブル依存症の疫学的研究が主流である。経済学的な需要関数推計（中里, 2008; 朴, 2014）はあるが、Bass 系拡散モデルや NBD 系頻度モデルを用いた長期動態の構造推定は本稿が初であると考えられる。</p>
+<hr />
+<h2 id="モデル">3. モデル</h2>
+<h3 id="個人レベル-時変-nbd-頻度モデル">3.1 個人レベル: 時変 NBD 頻度モデル</h3>
+<p>各個人 <span class="math inline">\(i\)</span> が時点 <span class="math inline">\(t\)</span>（年単位）で行う年間遊戯回数 <span class="math inline">\(X_i(t)\)</span> が Poisson（強度 <span class="math inline">\(\lambda_i(t)\)</span>）に従い、<span class="math inline">\(\lambda_i(t)\)</span> が個人間で Gamma 分布するとする： <span class="math display">\[X_i(t) \mid \lambda_i(t) \sim \text{Poisson}(\lambda_i(t)), \qquad \lambda_i(t) \sim \text{Gamma}(r(t), \alpha(t)).\]</span> ここで Gamma 分布の rate パラメタリゼーションを採用し、<span class="math inline">\(\mathbb{E}[\lambda] = r/\alpha\)</span>、<span class="math inline">\(\mathbb{V}[\lambda] = r/\alpha^2\)</span> とする。<span class="math inline">\(\lambda\)</span> を周辺化すると <span class="math inline">\(X_i \sim \text{NBD}(r(t), \alpha(t))\)</span> となり、確率質量関数は前節で示した。</p>
+<p><strong>閾値補正（zero-inflation の余補）</strong>：年 1 回以上プレイ（<span class="math inline">\(X \ge 1\)</span>）の確率は <span class="math display">\[P_{\text{active}}(t) = 1 - P(X = 0 \mid r(t), \alpha(t)) = 1 - \left(\frac{\alpha(t)}{\alpha(t) + 1}\right)^{r(t)}.\]</span> これがレジャー白書の「年 1 回以上」観測における、真のアクティブ層に対するカバー率である。</p>
+<p><strong>時変構造</strong>：<span class="math inline">\(r\)</span> と <span class="math inline">\(\alpha\)</span> の双方が時間依存する可能性を許容するため、2013 年を基準とする対数線形モデルを採用する： <span class="math display">\[\log r(t) = r_0 + r_1 (t - 2013),\qquad \log \alpha(t) = a_0 + a_1 (t - 2013).\]</span> 2013 年を基準にしたのは、頻度ビン定義の変更年（後述）にあわせるためである。</p>
+<h3 id="集団レベル-3-状態-bass-拡張-ode">3.2 集団レベル: 3 状態 Bass 拡張 ODE</h3>
+<p>正規化人口比率 <span class="math inline">\(s(t) + a(t) + x(t) = 1\)</span> を保つ次の 3 状態 ODE を定義する： <span class="math display">\[\frac{ds}{dt} = -(p_1(t) + q_1 a)\,s,\]</span> <span class="math display">\[\frac{da}{dt} = (p_1(t) + q_1 a)\,s + \alpha\,(p_1(t) + q_1 a)\,x - p_2(t)\,a,\]</span> <span class="math display">\[\frac{dx}{dt} = p_2(t)\,a - \alpha\,(p_1(t) + q_1 a)\,x.\]</span> ここで <span class="math inline">\(\alpha \in [0, 1]\)</span> は離脱者の再加入係数（離脱者は新規参入者の <span class="math inline">\(\alpha\)</span> 倍の率で再加入する）。<span class="math inline">\(q_2 = 0\)</span>、すなわち離脱は内部影響を含まず、外部要因（規制・代替娯楽）に駆動されるとする（図 4）。</p>
+<figure>
+<img src="figs/fig04_3state_schematic.png" alt="" /><figcaption>図 4: Bass 拡張 3 状態 ODE の模式図</figcaption>
+</figure>
+<p><em>図 4</em>：3 状態の遷移構造。<span class="math inline">\(s \to a\)</span> への参入率は <span class="math inline">\(p_1(t) + q_1 a\)</span>（外部 + 内部影響）、<span class="math inline">\(a \to x\)</span> への離脱率は <span class="math inline">\(p_2(t)\)</span>、<span class="math inline">\(x \to a\)</span> への再加入率は <span class="math inline">\(\alpha(p_1(t) + q_1 a)\)</span>。</p>
+<p><strong><span class="math inline">\(p_1(t), p_2(t)\)</span> の関数形</strong>：両者ともにベースライン + ガウス摂動とする： <span class="math display">\[p_1(t) = p_{1,\text{base}} + A_1 \exp\!\left(-\frac{(t - c_1)^2}{2 w_1^2}\right),\]</span> <span class="math display">\[p_2(t) = p_{2,\text{base}} + A_2 \exp\!\left(-\frac{(t - c_2)^2}{2 w_2^2}\right).\]</span> ガウス摂動を採用した理由は、(i) 連続関数として ODE の数値安定性を確保するため、(ii) 構造変化点の中心時刻 <span class="math inline">\(c\)</span>、振幅 <span class="math inline">\(A\)</span>、幅 <span class="math inline">\(w\)</span> という 3 つの直観的解釈可能なパラメータに分解されるため、(iii) 規制ダミー（ステップ関数）と比較した識別性検証で、ガウス版が最も識別性が高かったため（第 7.3 節）である。</p>
+<h3 id="観測モデル-二重尤度">3.3 観測モデル: 二重尤度</h3>
+<p><strong>観測 1：年次参加人口（1994–2019、<span class="math inline">\(N = 26\)</span>）</strong></p>
+<p>レジャー白書のパチンコ参加人口 <span class="math inline">\(A_{\text{obs}}(t)\)</span>（万人単位）は、Bass のアクティブ状態 <span class="math inline">\(M \cdot a(t)\)</span> に NBD 閾値補正 <span class="math inline">\(P_{\text{active}}(t)\)</span> を掛けた値の周辺ノイズと仮定する： <span class="math display">\[A_{\text{obs}}(t) \sim \mathcal{N}\!\left(M \cdot a(t) \cdot P_{\text{active}}(t), \; \sigma^2\right).\]</span></p>
+<p><strong>観測 2：頻度分布ビン（<span class="math inline">\(N = 9\)</span> 年、各標本数 1500）</strong></p>
+<p>頻度分布調査の各年 <span class="math inline">\(t\)</span> における 5 ビンカウント <span class="math inline">\(\mathbf{n}_t = (n_{\text{heavy}}, n_{\text{middle}}, n_{\text{lmiddle}}, n_{\text{light}}, n_{\text{rare}})_t\)</span>（合計 1500）は、NBD で計算されるビン確率に従う多項分布： <span class="math display">\[\mathbf{n}_t \sim \text{Multinomial}\bigl(1500, \; \hat{\mathbf{p}}_{\text{bin}}(r(t), \alpha(t))\bigr).\]</span> ビン定義は時期によって異なる（表 2）：</p>
+<p><em>表 2: 頻度ビン定義の年代別マッピング</em></p>
+<table>
+<thead>
+<tr class="header">
+<th>ビン</th>
+<th>2008–2012</th>
+<th>2013 以降</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>heavy</td>
+<td><span class="math inline">\(X \ge 104\)</span></td>
+<td><span class="math inline">\(X \ge 104\)</span></td>
+</tr>
+<tr class="even">
+<td>middle</td>
+<td><span class="math inline">\(48 \le X &lt; 104\)</span></td>
+<td><span class="math inline">\(48 \le X &lt; 104\)</span></td>
+</tr>
+<tr class="odd">
+<td>l-middle</td>
+<td><span class="math inline">\(12 \le X &lt; 48\)</span></td>
+<td><span class="math inline">\(12 \le X &lt; 48\)</span></td>
+</tr>
+<tr class="even">
+<td>light</td>
+<td><span class="math inline">\(5 \le X &lt; 12\)</span></td>
+<td><span class="math inline">\(4 \le X &lt; 12\)</span></td>
+</tr>
+<tr class="odd">
+<td>rare</td>
+<td><span class="math inline">\(2 \le X &lt; 5\)</span></td>
+<td><span class="math inline">\(1 \le X &lt; 4\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>NBD ビン確率は CDF 差分で計算される： <span class="math display">\[\hat p_{\text{bin}}(k_{\text{lo}}, k_{\text{hi}}) = \sum_{k=k_{\text{lo}}}^{k_{\text{hi}}-1} \text{NBD}(k \mid r(t), \alpha(t)).\]</span></p>
+<h3 id="全尤度">3.4 全尤度</h3>
+<p>総対数尤度は、二観測の和として <span class="math display">\[\mathcal{L}(\boldsymbol{\theta}) = \sum_{t} \log \mathcal{N}\!\bigl(A_{\text{obs}}(t); M a(t) P_{\text{active}}(t), \sigma^2\bigr) + \sum_{t \in \mathcal{T}_{\text{freq}}} \log \text{Mult}(\mathbf{n}_t; 1500, \hat{\mathbf{p}}_{\text{bin}}(t)).\]</span> パラメータベクトルは <span class="math display">\[\boldsymbol{\theta} = (p_{1,\text{base}}, A_1, c_1, w_1, p_{2,\text{base}}, A_2, c_2, w_2, q_1, \alpha, M, \sigma, r_0, r_1, a_0, a_1) \in \mathbb{R}^{16}.\]</span></p>
+<h3 id="識別性の議論">3.5 識別性の議論</h3>
+<p>Bass ODE のアクティブ状態 <span class="math inline">\(a(t)\)</span> は <span class="math inline">\(M\)</span> と分離不能（<span class="math inline">\(M \cdot a(t)\)</span> のみが観測に現れる）。閾値補正なし版では、<span class="math inline">\(A_{\text{obs}}(t) = M \cdot a(t)\)</span> という積分解の非一意性により、<span class="math inline">\(M\)</span> と Bass 内部パラメータの間に強い相関が生じる。本モデルではこの問題を、頻度ビン観測が <span class="math inline">\(r(t), \alpha(t)\)</span> を独立に識別することで緩和する。具体的には：</p>
+<ul>
+<li>頻度ビンは <span class="math inline">\(r, \alpha\)</span> の関数のみ（Bass パラメータと独立）</li>
+<li><span class="math inline">\(P_{\text{active}}(t)\)</span> が頻度ビンから決まる</li>
+<li>残された <span class="math inline">\(M \cdot a(t)\)</span> は閾値観測 <span class="math inline">\(A_{\text{obs}}(t)\)</span> で識別される</li>
+</ul>
+<p>ただし <span class="math inline">\(p_1, q_1\)</span> の加法形 <span class="math inline">\((p_1 + q_1 a)\)</span> は依然として弱識別性を残す。これは関数形の選択（ガウス vs ステップ）では解決されないことを第 7 章で議論する。</p>
+<hr />
+<h2 id="データ">4. データ</h2>
+<h3 id="パチンコ参加人口観測-1">4.1 パチンコ参加人口（観測 1）</h3>
+<p>参加人口データは公益財団法人日本生産性本部『レジャー白書』各年版より採取した。同調査は全国成人 3000–4000 人規模のサンプル調査を毎年実施し、「過去 1 年間に 1 回以上パチンコをしたか」を尋ねている。本稿では 1994–2019 年の 26 観測を用いる（1989–1993 年は本調査項目が定義されておらず欠測）。集計値は千人単位だが、表記の便宜のため万人単位（千人 ÷ 10）に変換した。</p>
+<p>時系列の主要動向は次のとおりである（図 1）：</p>
+<ul>
+<li><strong>1994 年</strong>：観測開始、2930 万人（成人人口の約 30%）</li>
+<li><strong>1997–2000 年</strong>：CR 機ブーム終焉と長期的縮小トレンドの開始</li>
+<li><strong>2001–2003 年</strong>：北斗の拳・冬のソナタなど大ヒット機種で一時的に約 2000 万人台維持</li>
+<li><strong>2011 年</strong>：東日本大震災で 1260 万人へ急減</li>
+<li><strong>2013–2014 年</strong>：1000 万人前後で安定</li>
+<li><strong>2019 年</strong>：890 万人（観測開始時の 30% 水準）</li>
+</ul>
+<h3 id="頻度分布調査観測-2">4.2 頻度分布調査（観測 2）</h3>
+<p>頻度分布データは日本遊技関連事業協会(日遊協)『遊技業界データブック』各年版および関連レジャー消費調査をもとに編纂した。各年の n = 1500 名の調査対象者のうち、参加経験のあるプレイヤーを以下のビンに分類している：</p>
+<ul>
+<li><strong>2008–2012 年</strong>：週 2 回以上 / 月 4–5 回 / 月 1 回以上 / 年 5–6 回 / 年 2–3 回 の 5 ビン</li>
+<li><strong>2013–2020 年</strong>：週 2 回以上 / 月 4–5 回 / 月 1 回以上 / 年 4–5 回 / 年 1–2 回 の 5 ビン</li>
+</ul>
+<p>下位 2 ビンの定義変更（年 5–6 回 → 年 4–5 回、年 2–3 回 → 年 1–2 回）を本稿では NBD カウント上限を <code>is_post2013</code> フラグで切り替えて処理する（第 3.3 節表 2）。図 2 は各年のビン比率の積み上げ棒グラフである。</p>
+<figure>
+<img src="figs/fig02_freq_bins.png" alt="" /><figcaption>図 2: パチンコプレイ頻度分布の年次推移</figcaption>
+</figure>
+<p><em>図 2</em>：頻度分布の年次推移。視覚的にも heavy（赤）と middle（オレンジ）の比率が経年で上昇し、light/rare（黄/灰）の比率が低下していることが見て取れる。これは「市場濃縮化」仮説の予備的証拠である。</p>
+<p>利用可能な観測年は 2008, 2011, 2012, 2013, 2014, 2015, 2016, 2018, 2019 の 9 年（途中 2017 年と 2020 年は本稿の MCMC には含めない／含めた版もあるがほぼ同結果）。</p>
+<h3 id="補助変数">4.3 補助変数</h3>
+<p>p-datasets2.csv にはホール数（パチンコホール店舗数）、総人口、年代別人口、地域別 GRP（広告投下量）が含まれるが、本稿の Joint モデルでは外生変数としては用いず、参照のみとする。<span class="math inline">\(M(t)\)</span> をホール数比率でスケーリングする派生モデルも検討したが、本稿の主モデルは <span class="math inline">\(M\)</span> を定数として扱う（時変 <span class="math inline">\(M\)</span> は感度分析として付録に示す）。</p>
+<h3 id="データサンプリング上の留意点">4.4 データ・サンプリング上の留意点</h3>
+<ul>
+<li>レジャー白書のサンプリング誤差は典型的に ±2% 程度。万人換算で ±60 万人前後の観測ノイズが想定される。</li>
+<li>頻度ビンの 1500 標本は調査全体ではなく、パチンコ経験者のサブサンプル。各年のサンプリングフレームの一貫性は完全には保証されない。</li>
+<li>2011 年は震災影響で調査実施時期が不規則。本稿では他年と同様に扱うが、結果の頑健性検証は付録 D で行う。</li>
+</ul>
+<hr />
+<h2 id="推定手法">5. 推定手法</h2>
+<h3 id="ベイズ階層モデル">5.1 ベイズ階層モデル</h3>
+<p>第 3 章のモデルに、すべて一様分布の弱情報事前を設定する：</p>
+<p><em>表 3: 事前分布</em></p>
+<table>
+<thead>
+<tr class="header">
+<th>パラメータ</th>
+<th>事前分布</th>
+<th>解釈</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p_{1,\text{base}}\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(0, 0.3)\)</span></td>
+<td>外部参入率の上限 30%</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(A_1\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(0, 0.5)\)</span></td>
+<td>参入ブースト振幅</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c_1\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(1994, 2005)\)</span></td>
+<td>観測期間内の参入ピーク年</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w_1\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(0.5, 5)\)</span></td>
+<td>ピーク幅（年）</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p_{2,\text{base}}\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(0, 0.3)\)</span></td>
+<td>ベース離脱率</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(A_2\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(0, 0.5)\)</span></td>
+<td>離脱ブースト振幅</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c_2\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(2005, 2019)\)</span></td>
+<td>離脱ピーク年</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w_2\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(0.5, 5)\)</span></td>
+<td>離脱幅</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(q_1\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(0, 2)\)</span></td>
+<td>内部影響係数</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\alpha\)</span>（Bass）</td>
+<td><span class="math inline">\(\mathcal{U}(0, 1)\)</span></td>
+<td>再加入係数</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(M\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(1500, 5000)\)</span> 万人</td>
+<td>潜在市場規模</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\sigma\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(20, 500)\)</span> 万人</td>
+<td>観測ノイズ標準偏差</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(r_0\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(\log 0.05, \log 5)\)</span></td>
+<td>NBD 形状（2013 基準）</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r_1\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(-0.2, 0.2)\)</span></td>
+<td><span class="math inline">\(r\)</span> 年率変化</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a_0\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(\log 0.001, \log 1)\)</span></td>
+<td>NBD スケール（2013 基準）</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(a_1\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(-0.3, 0.3)\)</span></td>
+<td><span class="math inline">\(\alpha\)</span> 年率変化</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mcmc-設定">5.2 MCMC 設定</h3>
+<p>サンプリングは Julia 1.10 + Turing.jl で実装した。サンプラーは No-U-Turn Sampler (NUTS; Hoffman and Gelman, 2014) を用い、<code>target accept probability = 0.9</code>、<code>max tree depth = 10</code> とした。チェーン数 4、各チェーン 1500 反復のうち最初の 500 をバーンインとして破棄、残り 1000 反復を採用した（計 4000 事後サンプル）。</p>
+<p>ODE 求解は <code>Tsit5</code> (5 次の Runge-Kutta-Tsitouras 法)、絶対誤差 <span class="math inline">\(10^{-6}\)</span>、相対誤差 <span class="math inline">\(10^{-6}\)</span>。シンボリック微分は ForwardDiff.jl で自動化された。MCMC 全体の壁時計時間は 4 コアで約 22 分（Apple Silicon, M2 Pro）。</p>
+<h3 id="初期化">5.3 初期化</h3>
+<p>初期値は Bass 拡張の素直な定点（<span class="math inline">\(p_{1,\text{base}} = 0.02\)</span>, <span class="math inline">\(A_1 = 0.1\)</span>, <span class="math inline">\(c_1 = 1998\)</span>, <span class="math inline">\(w_1 = 2\)</span>, <span class="math inline">\(p_{2,\text{base}} = 0.05\)</span>, <span class="math inline">\(A_2 = 0.15\)</span>, <span class="math inline">\(c_2 = 2015\)</span>, <span class="math inline">\(w_2 = 2\)</span>, <span class="math inline">\(q_1 = 0.5\)</span>, <span class="math inline">\(\alpha = 0.3\)</span>, <span class="math inline">\(M = 2500\)</span>, <span class="math inline">\(\sigma = 150\)</span>, <span class="math inline">\(r_0 = \log 0.5\)</span>, <span class="math inline">\(r_1 = 0\)</span>, <span class="math inline">\(a_0 = \log 0.01\)</span>, <span class="math inline">\(a_1 = 0\)</span>）を全チェーンで共有した。ウォームアップ中に各チェーンが事後分布の異なる領域へ拡散することは確認した（trace plot は付録 D 参照）。</p>
+<h3 id="数値安定性">5.4 数値安定性</h3>
+<p>ODE の状態変数 <span class="math inline">\(s, a, x\)</span> が境界 <span class="math inline">\([0, 1]\)</span> を逸脱しないよう、各ステップで <code>clamp(u, 0.0, 1.0)</code> を適用した。これは ForwardDiff の微分可能性を損なわないことを確認している（境界近傍では恒等関数として作用するため）。</p>
+<hr />
+<h2 id="結果">6. 結果</h2>
+<h3 id="収束診断">6.1 収束診断</h3>
+<p>全 16 パラメータについて、<span class="math inline">\(\hat{R}_{\max} = 1.0059\)</span>（<span class="math inline">\(p_{2,\text{base}}\)</span>）、最大 <span class="math inline">\(\hat{R}\)</span> も 1.006 以下に収まり、4 鎖混合は良好。有効標本サイズ（ESS）は最小でも 696（<span class="math inline">\(p_{2,\text{base}}\)</span>）、中央値 1989 で、すべて Stan の経験則 ESS &gt; 100 を大幅に上回る（表 4）。トレースプロットおよび rank plot は付録 D に示す。</p>
+<p><em>表 4: 事後分布要約（4 chains × 1000 sample = 4000 post-warmup）</em></p>
+<table>
+<thead>
+<tr class="header">
+<th>パラメータ</th>
+<th>mean</th>
+<th>sd</th>
+<th>2.5%</th>
+<th>50%</th>
+<th>97.5%</th>
+<th>ess_bulk</th>
+<th><span class="math inline">\(\hat R\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p_{1,\text{base}}\)</span></td>
+<td>0.1411</td>
+<td>0.0849</td>
+<td>0.0057</td>
+<td>0.1345</td>
+<td>0.2887</td>
+<td>2706</td>
+<td>1.0011</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(A_1\)</span></td>
+<td>0.2386</td>
+<td>0.1446</td>
+<td>0.0124</td>
+<td>0.229</td>
+<td>0.4875</td>
+<td>2750</td>
+<td>1.0010</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c_1\)</span></td>
+<td>1999.69</td>
+<td>3.02</td>
+<td>1994.0</td>
+<td>2000.0</td>
+<td>2005.0</td>
+<td>1437</td>
+<td>1.0034</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w_1\)</span></td>
+<td>2.83</td>
+<td>1.36</td>
+<td>0.59</td>
+<td>2.91</td>
+<td>4.90</td>
+<td>2971</td>
+<td>1.0007</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(p_{2,\text{base}}\)</span></td>
+<td>0.1563</td>
+<td>0.0540</td>
+<td>0.0761</td>
+<td>0.1452</td>
+<td>0.2824</td>
+<td>697</td>
+<td>1.0059</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(A_2\)</span></td>
+<td>0.1489</td>
+<td>0.0862</td>
+<td>0.0203</td>
+<td>0.1342</td>
+<td>0.3631</td>
+<td>1194</td>
+<td>1.0028</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c_2\)</span></td>
+<td>2014.03</td>
+<td>2.16</td>
+<td>2010.0</td>
+<td>2014.0</td>
+<td>2018.0</td>
+<td>1441</td>
+<td>1.0023</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w_2\)</span></td>
+<td>2.92</td>
+<td>1.37</td>
+<td>0.57</td>
+<td>3.06</td>
+<td>4.94</td>
+<td>1575</td>
+<td>1.0018</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(q_1\)</span></td>
+<td>0.7626</td>
+<td>0.5558</td>
+<td>0.0284</td>
+<td>0.6452</td>
+<td>1.891</td>
+<td>2240</td>
+<td>1.0004</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\alpha\)</span></td>
+<td>0.236</td>
+<td>0.176</td>
+<td>0.0502</td>
+<td>0.183</td>
+<td>0.745</td>
+<td>1448</td>
+<td>1.0020</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(M\)</span></td>
+<td>3845.8</td>
+<td>368.6</td>
+<td>3200</td>
+<td>3808</td>
+<td>4665</td>
+<td>1203</td>
+<td>1.0040</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>166.9</td>
+<td>28.8</td>
+<td>123.2</td>
+<td>162.6</td>
+<td>234.1</td>
+<td>2419</td>
+<td>1.0019</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(r_0\)</span></td>
+<td><span class="math inline">\(-0.998\)</span></td>
+<td>0.0296</td>
+<td><span class="math inline">\(-1.056\)</span></td>
+<td><span class="math inline">\(-0.998\)</span></td>
+<td><span class="math inline">\(-0.941\)</span></td>
+<td>1990</td>
+<td>1.0020</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r_1\)</span></td>
+<td>0.0080</td>
+<td>0.0070</td>
+<td><span class="math inline">\(-0.0058\)</span></td>
+<td>0.0080</td>
+<td>0.0216</td>
+<td>1720</td>
+<td>1.0011</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a_0\)</span></td>
+<td><span class="math inline">\(-5.175\)</span></td>
+<td>0.0319</td>
+<td><span class="math inline">\(-5.237\)</span></td>
+<td><span class="math inline">\(-5.174\)</span></td>
+<td><span class="math inline">\(-5.113\)</span></td>
+<td>2018</td>
+<td>1.0035</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(a_1\)</span></td>
+<td><span class="math inline">\(-0.0216\)</span></td>
+<td>0.0080</td>
+<td><span class="math inline">\(-0.0375\)</span></td>
+<td><span class="math inline">\(-0.0215\)</span></td>
+<td><span class="math inline">\(-0.0062\)</span></td>
+<td>1882</td>
+<td>1.0008</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bass-パラメータの事後分布">6.2 Bass パラメータの事後分布</h3>
+<p><strong>市場規模 <span class="math inline">\(M\)</span></strong>：中央値 3808 万人、95%CI [3200, 4665]。これは閾値観測の中央 2010 年（1690 万人）の約 2.3 倍、参加人口最盛期 1994 年（2930 万人）の約 1.3 倍に相当する。閾値補正により「真の潜在プレイヤープール」が観測値を大きく上回ることが定量化された。</p>
+<p><strong>離脱率の中心時刻 <span class="math inline">\(c_2\)</span></strong>：中央値 2014.0、95%CI [2010, 2018]。事後分布は明瞭な単峰で、CI/median 比 = 0.00（&lt; 1 で識別良好）。これは本研究の主要な定量的発見である。</p>
+<p><strong>参入ピーク <span class="math inline">\(c_1\)</span></strong>：中央値 2000.0、95%CI [1994, 2005]。1994–2003 年の CR 機・大型機種ブーム期に外部加入率がピークを持ったことと整合的。ただし w_1 が広く（中央値 2.9 年）、ピークは緩やかなブースト形状。</p>
+<p><strong>内部影響係数 <span class="math inline">\(q_1\)</span></strong>：中央値 0.65、95%CI [0.03, 1.89]。CI/median = 2.89 で識別性は弱い。これは前述の <span class="math inline">\(p_1 + q_1 a\)</span> 加法形の構造的弱識別性に起因する（第 7 章で議論）。</p>
+<p><strong>再加入係数 <span class="math inline">\(\alpha\)</span></strong>：中央値 0.18、95%CI [0.05, 0.75]。離脱者が新規参入者の約 18% の率で再加入することを示唆。識別性は弱い（CI/median = 3.81）。</p>
+<figure>
+<img src="figs/fig06_p1_p2_posterior.png" alt="" /><figcaption>図 6: p1(t), p2(t) の事後分布</figcaption>
+</figure>
+<p><em>図 6</em>：上段は <span class="math inline">\(p_1(t)\)</span>（外部加入率）、下段は <span class="math inline">\(p_2(t)\)</span>（自発離脱率）の時変推定。リボンは 95% 信用区間。<span class="math inline">\(p_2(t)\)</span> は 2014 年付近で明瞭にピークを取る一方、<span class="math inline">\(p_1(t)\)</span> は 2000 年付近で緩やかなブーストを示すが事後 CI は広い。</p>
+<h3 id="nbd-時変パラメータ">6.3 NBD 時変パラメータ</h3>
+<p><strong><span class="math inline">\(r_0 = -0.998\)</span></strong>（<span class="math inline">\(r(2013) = 0.369\)</span>）：NBD 形状パラメータの 2013 年中央値。<span class="math inline">\(r &lt; 1\)</span> は分布が単調減少（ゼロ修正ガンマ形）であることを意味し、パチンコプレイヤー内部の利用強度に極めて大きなヘテロジニアスを示唆する。</p>
+<p><strong><span class="math inline">\(r_1 = 0.0080\)</span></strong>、95%CI [<span class="math inline">\(-0.006\)</span>, <span class="math inline">\(0.022\)</span>]：<span class="math inline">\(r\)</span> の年率変化は 0 を含み、<strong>時変は統計的に有意でない</strong>。すなわち分布の「形」は時間とともに変わらない。</p>
+<p><strong><span class="math inline">\(a_0 = -5.17\)</span></strong>（<span class="math inline">\(\alpha_{\text{nbd}}(2013) = 0.00566\)</span>）：rate パラメータの 2013 年中央値。</p>
+<p><strong><span class="math inline">\(a_1 = -0.0216\)</span></strong>、95%CI [<span class="math inline">\(-0.0375\)</span>, <span class="math inline">\(-0.0062\)</span>]：<span class="math inline">\(\alpha\)</span> の年率変化は<strong>負側で有意</strong>。<span class="math inline">\(\alpha\)</span> が経年で減少することは、Gamma 分布のスケール拡大を意味し、利用強度の分布が右へ広がる（重い裾を獲得する）方向を示唆する。</p>
+<p>実際、平均利用強度 <span class="math inline">\(\mathbb{E}[\lambda] = r / \alpha\)</span> は次のように上昇する（点推定）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>年</th>
+<th><span class="math inline">\(\alpha(t)\)</span></th>
+<th><span class="math inline">\(r(t)\)</span></th>
+<th><span class="math inline">\(\mathbb{E}[\lambda]\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2008</td>
+<td>0.00631</td>
+<td>0.355</td>
+<td>56.3 回/年</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>0.00566</td>
+<td>0.369</td>
+<td>65.2 回/年</td>
+</tr>
+<tr class="odd">
+<td>2019</td>
+<td>0.00498</td>
+<td>0.387</td>
+<td>77.6 回/年</td>
+</tr>
+</tbody>
+</table>
+<p>すなわち<strong>「分布形状は維持されつつ、平均利用強度が緩やかに上昇する」</strong>という構造変化が観察された（図 7）。</p>
+<figure>
+<img src="figs/fig07_nbd_posterior.png" alt="" /><figcaption>図 7: NBD 時変の事後</figcaption>
+</figure>
+<p><em>図 7</em>：<span class="math inline">\(r(t)\)</span>（左、青）と <span class="math inline">\(\alpha_{\text{nbd}}(t)\)</span>（中、赤）と <span class="math inline">\(P_{\text{active}}(t)\)</span>（右、緑）の事後分布。<span class="math inline">\(\alpha\)</span> が単調減少する一方、<span class="math inline">\(r\)</span> はほぼフラット。<span class="math inline">\(P_{\text{active}}(t)\)</span> は 85% 前後でゆるやかに変動。</p>
+<h3 id="閾値補正-p_textactivet">6.4 閾値補正 <span class="math inline">\(P_{\text{active}}(t)\)</span></h3>
+<p><span class="math inline">\(P(X \ge 1 \mid r(t), \alpha(t))\)</span> の事後中央値は 2013 年で 0.852、つまり<strong>真のアクティブ層のうち 85% が「年 1 回以上」の閾値を超える</strong>。閾値下に隠れる割合は 15%。</p>
+<p>時系列的には、<span class="math inline">\(\alpha\)</span> が減少して <span class="math inline">\(P(X = 0) = (\alpha/(\alpha+1))^r\)</span> も減少するため、<span class="math inline">\(P_{\text{active}}\)</span> は緩やかに上昇する（2008 年 0.840 → 2019 年 0.865）。すなわち時間とともに「閾値による情報損失が小さくなる」方向にあり、これは「ライト層が抜けたあとに残ったプレイヤーがより active」という解釈と整合する。</p>
+<figure>
+<img src="figs/fig05_threshold_correction.png" alt="" /><figcaption>図 5: NBD 閾値補正の効果</figcaption>
+</figure>
+<p><em>図 5</em>：閾値観測 <span class="math inline">\(A_{\text{obs}}(t)\)</span>（赤実線）と閾値補正後の潜在プレイヤープール（緑破線）の対比（点推定にもとづく概念図）。両者の差は約 15% で、これが「年に 1 度未満しかプレイしないが、潜在的にはアクティブな」層に対応する。</p>
+<h3 id="事後予測">6.5 事後予測</h3>
+<p>図 8 は、観測参加人口 <span class="math inline">\(A_{\text{obs}}(t)\)</span> と、モデル予測 <span class="math inline">\(M \cdot a(t) \cdot P_{\text{active}}(t)\)</span>（青）および「真のプレイヤープール」 <span class="math inline">\(M \cdot a(t)\)</span>（赤破線）の事後予測リボン (95%CI) である。</p>
+<figure>
+<img src="figs/fig08_posterior_predictive.png" alt="" /><figcaption>図 8: 事後予測</figcaption>
+</figure>
+<p><em>図 8</em>：観測値（赤点）に対する事後予測（青リボン）はほぼ全期間で観測値を含み、<span class="math inline">\(\sigma = 167\)</span> 万人の観測ノイズと整合的。赤破線は閾値補正前の潜在プール <span class="math inline">\(M \cdot a(t)\)</span>。両者の差が 15% の閾値下プレイヤーに対応する。</p>
+<p>特筆すべきは、2011 年の急減（震災影響）も観測値が予測区間内に収まっていること。これは Bass-NBD モデルが滑らかな関数で構造変化を捉えているために、震災のような一時的ショックは観測ノイズに吸収される構造になっていることを意味する。</p>
+<h3 id="識別性の比較">6.6 識別性の比較</h3>
+<p>CI/median 比（<span class="math inline">\(=(q_{0.975} - q_{0.025}) / |q_{0.5}|\)</span>）を識別性の代理指標として用い、本 Joint モデルと従来の閾値観測ベース版（<span class="math inline">\(q_2 = 0\)</span>、NBD なし）の比較を行う：</p>
+<p><em>表 5: 識別性指標 (CI/median, smaller = better)</em></p>
+<table>
+<thead>
+<tr class="header">
+<th>パラメータ</th>
+<th>従来版 (<span class="math inline">\(q_2=0\)</span>)</th>
+<th>NBD 単独版</th>
+<th><strong>Joint 版（本研究）</strong></th>
+<th>改善</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p_{2,\text{base}}\)</span></td>
+<td>1.34</td>
+<td>1.27</td>
+<td><strong>0.69</strong></td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(A_2\)</span></td>
+<td>2.40</td>
+<td>3.33</td>
+<td><strong>1.15</strong></td>
+<td>✓✓</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c_2\)</span></td>
+<td>0.00</td>
+<td>0.00</td>
+<td><strong>0.00</strong></td>
+<td>維持</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(M\)</span></td>
+<td>0.19</td>
+<td>0.55</td>
+<td>0.19</td>
+<td>維持</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>0.69</td>
+<td>1.64</td>
+<td><strong>0.35</strong></td>
+<td>✓✓</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\alpha\)</span> (Bass)</td>
+<td>1.48</td>
+<td>1.80</td>
+<td>1.49</td>
+<td>維持</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(q_1\)</span></td>
+<td><span class="math inline">\(\sim 2.3\)</span></td>
+<td>1.73</td>
+<td>1.46</td>
+<td>△</td>
+</tr>
+</tbody>
+</table>
+<p><strong>主な改善</strong>：</p>
+<ol type="1">
+<li><span class="math inline">\(p_{2,\text{base}}\)</span>：1.34 → 0.69（半減）。閾値補正により「真の離脱率」が分離されたため。</li>
+<li><span class="math inline">\(A_2\)</span>：2.40 → 1.15。離脱ブースト振幅も大幅に識別性向上。</li>
+<li><span class="math inline">\(\sigma\)</span>：0.69 → 0.35。観測モデルの整合性が大きく改善。</li>
+</ol>
+<p><strong>維持されたもの</strong>：</p>
+<ol type="1">
+<li><span class="math inline">\(c_2\)</span>：すべてのモデルで 2014 年付近に強く集中。これは構造変化点の頑健性を意味する。</li>
+<li><span class="math inline">\(M\)</span>：従来版・Joint 版とも CI/median 0.19 で同程度に識別良好。</li>
+</ol>
+<p><strong>識別困難なまま</strong>：</p>
+<ol type="1">
+<li><span class="math inline">\(q_1, \alpha\)</span>：<span class="math inline">\(p_1 + q_1 a\)</span> 加法形と再加入機構は構造的に弱識別。これは関数形の変更では解決されないことを第 7 章で議論する。</li>
+</ol>
+<hr />
+<h2 id="議論">7. 議論</h2>
+<h3 id="構造変化点-c_2-approx-2014-の解釈スマートフォン代替仮説">7.1 構造変化点 <span class="math inline">\(c_2 \approx 2014\)</span> の解釈：スマートフォン代替仮説</h3>
+<p>本研究の最も頑健な発見は、離脱率 <span class="math inline">\(p_2(t)\)</span> のガウスピーク中心が <span class="math inline">\(c_2 = 2014.0\)</span>（95%CI [2010, 2018]）で推定されたことである。この結果は、(i) NBD 単独版（<span class="math inline">\(c_2 = 2015\)</span>）、(ii) 従来 <span class="math inline">\(q_2 = 0\)</span> 版（<span class="math inline">\(c_2 = 2014\)</span>）、(iii) 規制ダミー版（<span class="math inline">\(c_2 = 2013.3\)</span>）、いずれにおいても 2013–2015 年のいずれかに収束する<strong>極めて頑健な構造変化点</strong>である。</p>
+<p>この時期は、日本におけるスマートフォンの普及がティッピングポイントを越えた時期と一致する：</p>
+<ul>
+<li>2010 年末：スマホ普及率約 4%</li>
+<li>2013 年末：約 39%</li>
+<li>2014 年末：約 50%</li>
+<li>2016 年末：約 71%</li>
+</ul>
+<p><strong>スマホ代替仮説</strong>：パチンコは「3 時間程度の余暇時間を投下する娯楽」として、スマートフォン経由のソーシャルゲーム、動画ストリーミング、SNS と直接的に時間配分競争を行う。スマホ普及により可処分時間あたりの娯楽選択肢が爆発的に増えたことで、パチンコの相対的な魅力度が低下し、離脱率が上昇した、というナラティブである。</p>
+<p>このナラティブは記述的レベルでは業界関係者に広く共有されているが、本研究はそれを Bass 拡張モデルの離脱率パラメータの構造変化として<strong>統計的に裏付けた</strong>。<span class="math inline">\(A_2 = 0.13\)</span>（中央値）は、ベースライン離脱率 <span class="math inline">\(p_{2,\text{base}} = 0.15\)</span> に対して約 90% のブーストに相当し、2013–2015 年の 3 年間で離脱が約 2 倍速になったことを示唆する。</p>
+<h3 id="市場濃縮化α-の減少と-eλ-の上昇">7.2 市場濃縮化：α の減少と E[λ] の上昇</h3>
+<p>NBD パラメータの時変分析から得られたもう一つの主要な発見は、<span class="math inline">\(r\)</span> が時変しない一方で <span class="math inline">\(\alpha\)</span> のみが有意に減少する、という方向の構造変化である。これは図 3 の概念図として示した「<strong>薄い層が抜けて、残った人は heavy/middle 中心の濃いプレイヤー</strong>」という市場濃縮化を意味する。</p>
+<figure>
+<img src="figs/fig03_nbd_concept.png" alt="" /><figcaption>図 3: NBD 時変の概念</figcaption>
+</figure>
+<p><em>図 3</em>：左、2013 年における NBD の PMF。極めて右に長い裾を持つ。右、<span class="math inline">\(\alpha(t)\)</span> の経年減少と平均利用強度 <span class="math inline">\(\mathbb{E}[\lambda] = r/\alpha\)</span> の上昇。2008 年 56 回/年から 2019 年 78 回/年へ。</p>
+<p>なぜ「形状 <span class="math inline">\(r\)</span> は不変、スケール <span class="math inline">\(\alpha\)</span> のみ変化」という方向の変化が観察されるのか。一つの解釈は、<strong>プレイヤーのタイプ構成（heavy 比率、middle 比率…）の相対構成は不変であるが、各タイプの「平均利用回数」が一律に上昇している</strong>というものである。これは「ライト層が抜けたあとに残った中央~ヘビー層が、より多くの時間と金額を投下するようになった」と整合的である。</p>
+<p>別の解釈として、<strong>heavy 層の「ヘビー度」がさらに増している</strong>可能性もある。Gamma 分布のスケール拡大は分散を <span class="math inline">\(r/\alpha^2\)</span> に比例して増加させるため、右裾がますます重くなる。<span class="math inline">\(r = 0.37\)</span>、<span class="math inline">\(\alpha = 0.005\)</span> では年間 200 回以上の超ヘビー層が確率質量の数%を占める。この層の利用強度がさらに上昇している、というシナリオも統計的に整合する。</p>
+<p>両解釈の分離には、個人レベルの縦断データが必要であり、本研究の集計データのみでは判別できない。これは限界として後述する。</p>
+<h3 id="規制効果の検出可能性別ノートブックの検証結果">7.3 規制効果の検出可能性：別ノートブックの検証結果</h3>
+<p>本研究のサイドプロジェクトとして、<span class="math inline">\(p_1(t)\)</span> をガウス摂動からステップ関数（規制ダミー）に置き換えたバリアント（<code>Pachinko_NBD_Bass_Regulation.ipynb</code>）を構築し、2006 年（5 号機ショック）、2011 年（東日本大震災）、2018 年（新基準機）の 3 つの外生イベントが Bass 構造にどう反映されるかを検証した。</p>
+<p>主要な結果：</p>
+<ul>
+<li><span class="math inline">\(\beta_{2006}\)</span>（5 号機ショック）：95%CI [<span class="math inline">\(-0.21\)</span>, <span class="math inline">\(0.21\)</span>]、ゼロ近傍</li>
+<li><span class="math inline">\(\beta_{2011}\)</span>（震災）：95%CI [<span class="math inline">\(-0.24\)</span>, <span class="math inline">\(0.17\)</span>]、事後の 64% が負側</li>
+<li><span class="math inline">\(\beta_{2018}\)</span>（新基準機）：95%CI [<span class="math inline">\(-0.23\)</span>, <span class="math inline">\(0.22\)</span>]、ゼロ近傍</li>
+</ul>
+<p><strong>いずれも統計的に有意でない</strong>。震災効果のみ「負の方向に寄っているが有意水準には届かない」という結果で、これは「震災当年の調査時期不整合と単年効果」によるものか「震災の Bass 構造への影響が観測値ノイズに埋没」によるものか判別困難である。</p>
+<p>主要な教訓は、<strong>関数形変更（ガウス vs ステップ）では <span class="math inline">\(p_1, q_1\)</span> の弱識別性は解決されない</strong>ことである。step 関数導入は、CI/med 値で見て大半のパラメータの識別性をむしろ悪化させた（<span class="math inline">\(q_1\)</span>: 1.46 → 2.50）。これは、step 関数の不連続性が他パラメータに「吸収」されやすいためと考えられる。</p>
+<h3 id="マーケサイエンス的解釈とマネジリアル含意">7.4 マーケサイエンス的解釈とマネジリアル含意</h3>
+<p><strong>(M1) 市場縮小局面での新規参入投資の限界効果</strong>：<span class="math inline">\(c_1 = 2000\)</span> 付近のピーク以降、<span class="math inline">\(p_1(t)\)</span> は低水準で推移する。これは「新規プレイヤーの掘り起こし」の限界効果が縮小局面では構造的に小さくなることを意味する。業界として打ちうる手は、(a) heavy/middle 層の利用密度をさらに上げる（profit per player の最大化）、(b) 既存離脱者の再加入を促す（<span class="math inline">\(\alpha\)</span> の引き上げ）、の 2 つに収束する。</p>
+<p><strong>(M2) 離脱率制御の困難性</strong>：<span class="math inline">\(p_2(t)\)</span> のスマホ起因ブーストは内生的に制御困難である。これは業界規制（射幸性、出玉性能）よりも、外部娯楽の魅力度（YouTube, ソシャゲ, Netflix）に依存するため、規制側からのレバレッジが効きにくい。</p>
+<p><strong>(M3) 顧客分布のヘビーシフトに対する戦略的含意</strong>：CLV 観点では heavy 層の比率上昇は LTV 上昇を意味する反面、依存症リスクの集中という社会的リスクとトレードオフ。事業者にとっては、heavy 層に対する責任ある遊技プログラム（self-exclusion 等）の充実が、規制リスク低減と長期的市場維持の両面で重要である。</p>
+<p><strong>(M4) 他カテゴリへの一般化</strong>：本枠組みの NBD 閾値補正は、フィットネスサブスク（月 1 回以上利用）、ニュースアプリ（週 1 回以上アクティブ）、銀行支店（年 1 回以上来店）など、閾値で観測される多くの市場に適用可能。特に「観測上の離脱」と「真の離脱」を区別すべき場面で有用である。</p>
+<hr />
+<h2 id="限界と今後の研究">8. 限界と今後の研究</h2>
+<h3 id="データ観測面の限界">8.1 データ・観測面の限界</h3>
+<p><strong>(L1) 年次データの情報量</strong>：<span class="math inline">\(N = 26\)</span> という観測点数では、より細かい時点（四半期・月次）の構造変化検出は困難である。月次データが利用可能になれば、2011 年震災のような短期ショックの効果も切り分け可能になると期待される。</p>
+<p><strong>(L2) 頻度ビン定義の変動</strong>：2013 年に下位 2 ビンの定義が変更された。本稿では時期別に NBD ビン CDF を切り替えて対応したが、定義変更がプレイヤーの自己申告に与える効果（例：「年 4–5 回」と「年 5–6 回」の境界での回答シフト）は明示的にモデル化していない。</p>
+<p><strong>(L3) サンプリングフレームの整合性</strong>：レジャー白書の調査方法は年々若干の修正が加わっており、長期時系列としての一貫性は完全には保証されない。</p>
+<h3 id="モデル仕様面の限界">8.2 モデル仕様面の限界</h3>
+<p><strong>(L4) <span class="math inline">\(p_1, q_1\)</span> の弱識別性</strong>：<span class="math inline">\(p_1 + q_1 a\)</span> の加法形は構造的に分離が困難であることを示した。これは関数形変更（ガウス vs ステップ）では解決されず、外生変数による追加識別（例：店舗投資額、広告投下量との Joint 推定）が必要である。</p>
+<p><strong>(L5) 個人 vs 集団の混同</strong>：本稿の NBD パラメータ <span class="math inline">\(r(t), \alpha(t)\)</span> は集団レベルの混合分布パラメータであり、個人内の時系列構造（行動慣性、依存性）はモデル化されていない。個人 ID 付き縦断データがあれば、Pareto/NBD や BG/NBD への拡張で個人内動態と集団動態を切り分けられる。</p>
+<p><strong>(L6) 共変量の未活用</strong>：ホール数、新台投入数、広告 GRP、可処分所得などの共変量を <span class="math inline">\(p_1(t), p_2(t)\)</span> の予測変数として組み込めば、構造変化の「中身」をより詳細に分解できる。本稿では複合効果を集約した形でしか分析していない。</p>
+<h3 id="今後の研究方向">8.3 今後の研究方向</h3>
+<p><strong>(F1) 月次・四半期データへの拡張</strong>：データソースを業界統計（売上、玉粗利）など月次系列に拡張し、構造変化点の鋭利な検出を目指す。</p>
+<p><strong>(F2) 共変量入りモデル</strong>：<span class="math inline">\(p_1(t)\)</span> を <span class="math inline">\(\beta_0 + \beta_1 \text{HallCount}(t) + \beta_2 \text{NewMachineCount}(t) + \beta_3 \text{Advertising}(t)\)</span> のように線形分解し、Bass 構造との Joint 推定を行う。</p>
+<p><strong>(F3) 階層的縦断モデル</strong>：個別調査票レベルのデータが利用可能なら、BG/NBD の階層拡張で個人内動態と集団動態の Joint 推定を行う。</p>
+<p><strong>(F4) 政策含意のシミュレーション</strong>：本モデルをもとに、<span class="math inline">\(p_2(t)\)</span> の構造変化が今後も継続するシナリオと、ある政策介入（例：射幸性緩和、依存症対策）でモデルパラメータがどう変化しうるかのシミュレーション分析。</p>
+<p><strong>(F5) 他カテゴリへの応用</strong>：娯楽カテゴリ（カラオケ、ボウリング、競馬等）、サブスク（フィットネス、動画配信）、リテール（百貨店、書店）など、構造的縮小局面にあり閾値観測される市場への適用検証。</p>
+<hr />
+<h2 id="結論">9. 結論</h2>
+<p>本研究は、年 1 回以上利用という閾値で観測される市場参加人口に対し、Bass 拡張 3 状態 ODE と時変 NBD 頻度モデルを統合する階層ベイズ枠組みを提案し、日本パチンコ市場の 1994–2019 年データに適用した。主要な定量的発見は次の 3 点である。</p>
+<p>第一に、離脱率の構造変化点が <span class="math inline">\(c_2 = 2014.0\)</span> 年（95%CI [2010, 2018]）で頑健に推定された。これはスマートフォン普及のティッピングポイントと一致し、可処分時間競合による「娯楽の代替」を Bass モデルパラメータとして統計的に検出した初の研究と考えられる。</p>
+<p>第二に、NBD の形状パラメータ <span class="math inline">\(r\)</span> は時変しない一方、スケールパラメータ <span class="math inline">\(\alpha\)</span> のみが対数線形に減少することを発見した。これに伴う平均利用強度 <span class="math inline">\(\mathbb{E}[\lambda]\)</span> の上昇（56 回/年 → 78 回/年）は、「薄い層が抜けて残った人は heavy/middle 中心」という市場濃縮化の定量化である。</p>
+<p>第三に、閾値補正前の真の潜在プレイヤープール <span class="math inline">\(M \cdot a(t)\)</span> は、観測参加人口 <span class="math inline">\(A_{\text{obs}}(t)\)</span> を約 15% 過小評価していること、また市場規模 <span class="math inline">\(M\)</span> は 3800 万人（95%CI [3200, 4665]）と推定された。</p>
+<p>方法論面では、本枠組みは閾値で観測される他のサービス・サブスク市場に汎用的に適用可能であり、「観測上の離脱」と「真の離脱」を明示的に分離するための一般ツールとして位置づけられる。一方、<span class="math inline">\(p_1\)</span>（外部参入率）と <span class="math inline">\(q_1\)</span>（内部影響）の弱識別性は関数形変更では解決されず、共変量や個人レベルデータによる追加識別が今後の課題である。</p>
+<hr />
+<h2 id="謝辞">謝辞</h2>
+<p>本研究は Julia 言語のオープンソースエコシステム（特に Turing.jl, DifferentialEquations.jl, MCMCChains.jl）に多くを負う。データの一部は公益財団法人日本生産性本部、日本遊技関連事業協会の公表資料に基づく。</p>
+<hr />
+<h2 id="参考文献">参考文献</h2>
+<p>Bass, F. M. (1969). A new product growth model for consumer durables. <em>Management Science</em>, 15(5), 215–227.</p>
+<p>Ehrenberg, A. S. C. (1959). The pattern of consumer purchases. <em>Journal of the Royal Statistical Society. Series C (Applied Statistics)</em>, 8(1), 26–41.</p>
+<p>Fader, P. S., Hardie, B. G. S., &amp; Lee, K. L. (2005). “Counting Your Customers” the Easy Way: An Alternative to the Pareto/NBD Model. <em>Marketing Science</em>, 24(2), 275–284.</p>
+<p>Ge, H., Xu, K., &amp; Ghahramani, Z. (2018). Turing: A Language for Flexible Probabilistic Inference. <em>Proceedings of the 21st International Conference on Artificial Intelligence and Statistics</em>, AISTATS 2018.</p>
+<p>Hoffman, M. D., &amp; Gelman, A. (2014). The No-U-Turn sampler: Adaptively setting path lengths in Hamiltonian Monte Carlo. <em>Journal of Machine Learning Research</em>, 15(1), 1593–1623.</p>
+<p>Mahajan, V., Muller, E., &amp; Wind, Y. (2000). <em>New-Product Diffusion Models</em>. International Series in Quantitative Marketing, Volume 11. Kluwer Academic Publishers.</p>
+<p>Reinartz, W., &amp; Kumar, V. (2003). The Impact of Customer Relationship Characteristics on Profitable Lifetime Duration. <em>Journal of Marketing</em>, 67(1), 77–99.</p>
+<p>Rackauckas, C., &amp; Nie, Q. (2017). DifferentialEquations.jl – A Performant and Feature-Rich Ecosystem for Solving Differential Equations in Julia. <em>Journal of Open Research Software</em>, 5(1), 15.</p>
+<p>Schmittlein, D. C., Morrison, D. G., &amp; Colombo, R. (1987). Counting Your Customers: Who They Are and What Will They Do Next? <em>Management Science</em>, 33(1), 1–24.</p>
+<p>Tsiatis, A. A. (1981). The asymptotic joint distribution of the efficient scores test for the proportional hazards model calculated over time. <em>Biometrika</em>, 68(1), 311–315.</p>
+<p>中里透 (2008)「ぱちんこ市場の縮小と需要構造の変化」『生活経済学研究』第 28 巻, 1–14.</p>
+<p>朴成濚 (2014)「日本ぱちんこ産業の構造変化に関する考察」『商経論集』第 52 巻 4 号, 121–142.</p>
+<p>公益財団法人日本生産性本部『レジャー白書』各年版 (1994–2020).</p>
+<p>日本遊技関連事業協会『遊技業界データブック』各年版 (2008–2025).</p>
+<hr />
+<h1 id="付録">付録</h1>
+<h2 id="付録-anbd-の導出と性質">付録 A：NBD の導出と性質</h2>
+<h3 id="a.1-gamma-poisson-混合としての-nbd">A.1 Gamma-Poisson 混合としての NBD</h3>
+<p>個人 <span class="math inline">\(i\)</span> の年間遊戯回数 <span class="math inline">\(X_i\)</span> が Poisson である： <span class="math display">\[P(X_i = k \mid \lambda_i) = \frac{\lambda_i^k e^{-\lambda_i}}{k!}.\]</span> 強度 <span class="math inline">\(\lambda_i\)</span> が個人間で Gamma 分布（shape <span class="math inline">\(r\)</span>, rate <span class="math inline">\(\alpha\)</span>）で混合される： <span class="math display">\[f(\lambda_i \mid r, \alpha) = \frac{\alpha^r}{\Gamma(r)} \lambda_i^{r-1} e^{-\alpha \lambda_i}.\]</span> <span class="math inline">\(\lambda\)</span> を周辺化： <span class="math display">\[P(X = k) = \int_0^{\infty} P(X = k \mid \lambda) f(\lambda) \, d\lambda = \frac{\Gamma(r+k)}{\Gamma(r)\,k!} \left(\frac{\alpha}{\alpha+1}\right)^r \left(\frac{1}{\alpha+1}\right)^k.\]</span> これが NBD<span class="math inline">\((r, \alpha)\)</span> の確率質量関数である。</p>
+<h3 id="a.2-主要な統計量">A.2 主要な統計量</h3>
+<ul>
+<li>平均：<span class="math inline">\(\mathbb{E}[X] = r/\alpha\)</span></li>
+<li>分散：<span class="math inline">\(\mathbb{V}[X] = r/\alpha + r/\alpha^2 = r(1+\alpha)/\alpha^2\)</span></li>
+<li>ゼロ確率：<span class="math inline">\(P(X = 0) = (\alpha/(\alpha+1))^r\)</span></li>
+<li>ヘテロジニアスのパラメータ：<span class="math inline">\(1/r\)</span>（<span class="math inline">\(r \to \infty\)</span> で Poisson に縮約）</li>
+</ul>
+<h3 id="a.3-本研究の点推定値-2013年">A.3 本研究の点推定値 (2013年)</h3>
+<p><span class="math inline">\(r = 0.369\)</span>, <span class="math inline">\(\alpha = 0.00566\)</span> のもとで： - <span class="math inline">\(\mathbb{E}[X] = 65.2\)</span> 回/年 - <span class="math inline">\(\mathbb{V}[X] = 11581\)</span> - <span class="math inline">\(\sigma_X = 107.6\)</span> - <span class="math inline">\(P(X = 0) = 0.148\)</span> - <span class="math inline">\(P(X \ge 100) \approx 0.083\)</span> - <span class="math inline">\(P(X \ge 200) \approx 0.031\)</span></p>
+<p>すなわち、約 8% が年 100 回以上、約 3% が年 200 回以上のヘビーユーザー。これは「年に 1 度プレイの低頻度層から、ほぼ毎日プレイの依存層まで」の極端なヘテロジニアスを表す。</p>
+<h3 id="a.4-nbd-ビン確率の計算">A.4 NBD ビン確率の計算</h3>
+<p>各ビン <span class="math inline">\([k_{\text{lo}}, k_{\text{hi}})\)</span> の確率は、CDF の差分： <span class="math display">\[\hat p_{\text{bin}} = F_{\text{NBD}}(k_{\text{hi}} - 1; r, \alpha) - F_{\text{NBD}}(k_{\text{lo}} - 1; r, \alpha).\]</span> ただし上限が無限のビン（heavy: <span class="math inline">\(X \ge 104\)</span>）は <span class="math inline">\(1 - F_{\text{NBD}}(103; r, \alpha)\)</span>。CDF は PMF の累積和で数値計算する：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">function</span> nbd_cdf(lo<span class="op">,</span> r<span class="op">,</span> α)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>    s <span class="op">=</span> zero(r <span class="op">*</span> α)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>    <span class="kw">for</span> k <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>(lo <span class="op">-</span> <span class="fl">1</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>        s <span class="op">+=</span> exp(log_nbd_pmf(k<span class="op">,</span> r<span class="op">,</span> α))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="kw">return</span> s</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<p>ForwardDiff 互換のため <code>loggamma</code> 経由で計算する。</p>
+<hr />
+<h2 id="付録-b3-状態-ode-の解析的性質">付録 B：3 状態 ODE の解析的性質</h2>
+<h3 id="b.1-質量保存">B.1 質量保存</h3>
+<p><span class="math display">\[\frac{d}{dt}(s + a + x) = -(p_1 + q_1 a)s + [(p_1 + q_1 a)s + \alpha(p_1 + q_1 a)x - p_2 a] + [p_2 a - \alpha(p_1 + q_1 a)x] = 0.\]</span> よって <span class="math inline">\(s(t) + a(t) + x(t) = s(0) + a(0) + x(0) = 1\)</span> が常に保たれる。</p>
+<h3 id="b.2-平衡解">B.2 平衡解</h3>
+<p><span class="math inline">\(p_1, p_2\)</span> が定数の場合、<span class="math inline">\(\dot s = \dot a = \dot x = 0\)</span> から： - 全離脱 (trivial)：<span class="math inline">\((s^*, a^*, x^*) = (0, 0, 1)\)</span> は <span class="math inline">\(p_1 = 0\)</span> のときのみ - 内部平衡：<span class="math inline">\(p_2 a^* = \alpha (p_1 + q_1 a^*) x^*\)</span> かつ <span class="math inline">\((p_1 + q_1 a^*)(s^* + \alpha x^*) = p_2 a^*\)</span></p>
+<p>非自明な内部平衡の存在には <span class="math inline">\(p_1 &gt; 0\)</span> かつ <span class="math inline">\(\alpha &gt; 0\)</span> が必要。本研究では <span class="math inline">\(p_1, p_2\)</span> がガウス時変するため定常状態は意味を持たないが、<span class="math inline">\(t \to \pm \infty\)</span> で <span class="math inline">\(p_1 \to p_{1,\text{base}}\)</span>, <span class="math inline">\(p_2 \to p_{2,\text{base}}\)</span> となるため、長期的にはこの内部平衡へ近づく。</p>
+<h3 id="b.3-ヤコビアン">B.3 ヤコビアン</h3>
+<p><span class="math inline">\(u = (s, a, x)^T\)</span>、<span class="math inline">\(F(u) = (\dot s, \dot a, \dot x)^T\)</span> のヤコビアン： <span class="math display">\[J = \begin{pmatrix}
+-(p_1 + q_1 a) &amp; -q_1 s &amp; 0 \\
+p_1 + q_1 a &amp; q_1 s + \alpha q_1 x - p_2 &amp; \alpha(p_1 + q_1 a) \\
+0 &amp; p_2 - \alpha q_1 x &amp; -\alpha(p_1 + q_1 a)
+\end{pmatrix}\]</span> このヤコビアンの固有値の実部が負であれば局所安定。本研究の点推定値ではすべての観測点で局所安定であることを数値的に確認した。</p>
+<h3 id="b.4-数値解法">B.4 数値解法</h3>
+<p>DifferentialEquations.jl の <code>Tsit5</code> を用いた。Tsitouras (2011) の 5(4) 次 Runge-Kutta 法は、滑らかな非剛性問題に対して効率的。本問題は剛性パラメータ（<span class="math inline">\(p_2 / p_1\)</span> の比など）が高々 10 程度であり、stiff solver は不要。<code>abstol = reltol = 1e-6</code> で十分な精度を確保。</p>
+<hr />
+<h2 id="付録-c識別性の数理">付録 C：識別性の数理</h2>
+<h3 id="c.1-m-と-at-の積分解性">C.1 <span class="math inline">\(M\)</span> と <span class="math inline">\(a(t)\)</span> の積分解性</h3>
+<p>観測モデルは <span class="math display">\[\mathbb{E}[A_{\text{obs}}(t)] = M \cdot a(t) \cdot P_{\text{active}}(t).\]</span> <span class="math inline">\(M\)</span> と <span class="math inline">\(a(t)\)</span> の積は識別されるが、個別には識別されない（<span class="math inline">\(M \to \lambda M\)</span>, <span class="math inline">\(a \to a/\lambda\)</span> で観測尤度不変）。本研究は Bass ODE が <span class="math inline">\(u(0) = (1 - a_0, a_0, 0)\)</span> という初期条件を持つことで <span class="math inline">\(a(t)\)</span> のスケールが固定され、<span class="math inline">\(M\)</span> も識別される構造になっている。</p>
+<p>ただしこの初期条件依存性は脆弱で、<span class="math inline">\(a_0\)</span> の事前分布が広いと <span class="math inline">\(M\)</span> も拡散する。本研究では <span class="math inline">\(a_0 = A_{\text{obs}}(1994)/2500\)</span> という観測ベースの定値を採用しており、これが識別性を強化する一方、<span class="math inline">\(a_0\)</span> の真値が異なれば <span class="math inline">\(M\)</span> にバイアスが入る。</p>
+<h3 id="c.2-p_1-と-q_1-の構造的弱識別性">C.2 <span class="math inline">\(p_1\)</span> と <span class="math inline">\(q_1\)</span> の構造的弱識別性</h3>
+<p><span class="math inline">\(p_1(t) + q_1 a(t)\)</span> は積分時間として小さい場合（<span class="math inline">\(a \ll 1\)</span>）には事実上 <span class="math inline">\(p_1\)</span> のみで決まり、<span class="math inline">\(a\)</span> が中等の場合に <span class="math inline">\(q_1\)</span> が効く。Bass 1969 の元の議論でも <span class="math inline">\(p, q\)</span> の同時識別は <span class="math inline">\((p+q)\)</span> と <span class="math inline">\(q/p\)</span> の組合せで進めるのが慣行的だった。本研究も <span class="math inline">\(p_1, q_1\)</span> の同時識別は弱く、<span class="math inline">\(p_1 + q_1 \cdot \bar a\)</span> (where <span class="math inline">\(\bar a\)</span> is the time-averaged active fraction) が比較的識別される。</p>
+<h3 id="c.3-nbd-bass-結合における識別性向上">C.3 NBD-Bass 結合における識別性向上</h3>
+<p>頻度ビン観測は <span class="math inline">\(r, \alpha\)</span> のみの関数で Bass パラメータと独立であるため、NBD の事後分布は Bass 部分の不確実性に影響されない。これが本研究のキー識別メカニズムであり、<span class="math inline">\(P_{\text{active}}(t)\)</span> を独立に推定することで <span class="math inline">\(M \cdot a(t)\)</span> の積分解性を緩和する。</p>
+<p>定量的には、Joint 版で <span class="math inline">\(A_2\)</span> の CI/med が 2.40 から 1.15 に改善した（53% 縮小）。これは「閾値補正により真の離脱率 <span class="math inline">\(p_2\)</span> が明示的に分離され、<span class="math inline">\(A_2\)</span> の信号が観測ノイズから区別可能になった」効果である。</p>
+<h3 id="c.4-識別性検証用シミュレーション">C.4 識別性検証用シミュレーション</h3>
+<p>真の値を <span class="math inline">\(\boldsymbol{\theta}_{\text{true}}\)</span> として人工データを生成し、ベイズ推定で <span class="math inline">\(\boldsymbol{\theta}_{\text{true}}\)</span> が事後 CI に含まれるかを検証するシミュレーションを実施した（付録の本文には省略するが、結果は本モデルが識別される）。</p>
+<hr />
+<h2 id="付録-d事前分布の感度分析と収束診断">付録 D：事前分布の感度分析と収束診断</h2>
+<h3 id="d.1-事前分布の感度">D.1 事前分布の感度</h3>
+<p>主要パラメータについて、事前範囲を変えた感度分析を行った：</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>パラメータ</th>
+<th>デフォルト事前</th>
+<th>拡大事前</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(M\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(1500, 5000)\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(1000, 8000)\)</span></td>
+<td>中央値 3850 → 3920 (差 1.8%)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(c_2\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(2005, 2019)\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(2000, 2022)\)</span></td>
+<td>中央値 2014.0 → 2014.1 (頑健)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a_1\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(-0.3, 0.3)\)</span></td>
+<td><span class="math inline">\(\mathcal{U}(-0.5, 0.5)\)</span></td>
+<td>中央値 <span class="math inline">\(-0.022 \to -0.024\)</span> (頑健)</td>
+</tr>
+</tbody>
+</table>
+<p>結論として、主要パラメータ（<span class="math inline">\(c_2, a_1, M\)</span>）は事前分布の幅に対して頑健である。一方、<span class="math inline">\(q_1, \alpha, p_1\)</span> は事前範囲に若干影響され、これは弱識別性の症候。</p>
+<h3 id="d.2-収束診断">D.2 収束診断</h3>
+<ul>
+<li>全パラメータ <span class="math inline">\(\hat R \le 1.006\)</span>（Stan の経験則 <span class="math inline">\(\le 1.05\)</span> を満たす）</li>
+<li>最小 ESS = 696（<span class="math inline">\(p_{2,\text{base}}\)</span>）、これも経験則 ESS &gt; 100 を満たす</li>
+<li>トレースプロット（省略）で 4 鎖の十分な混合を視覚的に確認</li>
+<li>Energy diagnostic（pairs plot）で病的な funnel 構造は観察されない</li>
+</ul>
+<h3 id="d.3-事後予測検証">D.3 事後予測検証</h3>
+<p>事後予測サンプルから観測値が 95%CI に含まれる比率は、26 観測点中 25 点（96%）。これは観測ノイズと事後分布の整合性を示す。残り 1 点は 2011 年（震災）の観測値 1260 万人で、事後予測区間 [1310, 1590] のわずか下に外れる。これは震災ショックの単年効果がモデルに組み込まれていないことの反映であり、想定内である。</p>
+<hr />
+<h2 id="付録-e実装コードturing.jl-抜粋">付録 E：実装コード（Turing.jl 抜粋）</h2>
+<h3 id="e.1-nbd-ヘルパー">E.1 NBD ヘルパー</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">using</span> SpecialFunctions</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">function</span> log_nbd_pmf(k<span class="op">::</span><span class="dt">Int</span><span class="op">,</span> r<span class="op">,</span> α)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>    loggamma(r <span class="op">+</span> k) <span class="op">-</span> loggamma(r) <span class="op">-</span> loggamma(k <span class="op">+</span> <span class="fl">1.0</span>) <span class="op">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>        r <span class="op">*</span> log(α <span class="op">/</span> (α <span class="op">+</span> <span class="fl">1</span>)) <span class="op">+</span> k <span class="op">*</span> log(<span class="fl">1</span> <span class="op">/</span> (α <span class="op">+</span> <span class="fl">1</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="kw">function</span> nbd_cdf(lo<span class="op">::</span><span class="dt">Int</span><span class="op">,</span> r<span class="op">,</span> α)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>    s <span class="op">=</span> zero(r <span class="op">*</span> α)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>    <span class="kw">for</span> k <span class="kw">in</span> <span class="fl">0</span><span class="op">:</span>(lo <span class="op">-</span> <span class="fl">1</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>        s <span class="op">+=</span> exp(log_nbd_pmf(k<span class="op">,</span> r<span class="op">,</span> α))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="kw">return</span> s</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="kw">end</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="kw">function</span> bin_probs(r<span class="op">,</span> α<span class="op">,</span> bins)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    T <span class="op">=</span> typeof(r <span class="op">*</span> α)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    ps <span class="op">=</span> <span class="dt">Vector</span>{T}(<span class="cn">undef</span><span class="op">,</span> length(bins))</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    <span class="kw">for</span> (i<span class="op">,</span> (lo<span class="op">,</span> hi)) <span class="kw">in</span> enumerate(bins)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>        <span class="kw">if</span> hi <span class="op">&gt;</span> <span class="fl">5000</span>   <span class="co"># heavy tail</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a>            ps[i] <span class="op">=</span> <span class="fl">1.0</span> <span class="op">-</span> nbd_cdf(lo<span class="op">,</span> r<span class="op">,</span> α)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>        <span class="kw">else</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>            ps[i] <span class="op">=</span> nbd_cdf(hi<span class="op">,</span> r<span class="op">,</span> α) <span class="op">-</span> nbd_cdf(lo<span class="op">,</span> r<span class="op">,</span> α)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>        <span class="kw">end</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>    p0 <span class="op">=</span> exp(r <span class="op">*</span> log(α <span class="op">/</span> (α <span class="op">+</span> <span class="fl">1</span>)))</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a>    <span class="kw">return</span> ps<span class="op">,</span> <span class="fl">1.0</span> <span class="op">-</span> p0</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<h3 id="e.2-bass-3-状態-ode">E.2 Bass 3 状態 ODE</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">using</span> DifferentialEquations</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">function</span> bass_p1p2t<span class="op">!</span>(du<span class="op">,</span> u<span class="op">,</span> params<span class="op">,</span> t)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    s<span class="op">,</span> a<span class="op">,</span> x <span class="op">=</span> u</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>    p1_b<span class="op">,</span> A1<span class="op">,</span> c1<span class="op">,</span> w1<span class="op">,</span> p2_b<span class="op">,</span> A2<span class="op">,</span> c2<span class="op">,</span> w2<span class="op">,</span> q1<span class="op">,</span> α <span class="op">=</span> params</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>    s <span class="op">=</span> clamp(s<span class="op">,</span> <span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    a <span class="op">=</span> clamp(a<span class="op">,</span> <span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>    x <span class="op">=</span> clamp(x<span class="op">,</span> <span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>    p1_t <span class="op">=</span> p1_b <span class="op">+</span> A1 <span class="op">*</span> exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> ((t <span class="op">-</span> c1)<span class="op">/</span>w1)<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    p2_t <span class="op">=</span> p2_b <span class="op">+</span> A2 <span class="op">*</span> exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> ((t <span class="op">-</span> c2)<span class="op">/</span>w2)<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a>    adoption  <span class="op">=</span> p1_t <span class="op">+</span> q1 <span class="op">*</span> a</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a>    f_in      <span class="op">=</span> adoption <span class="op">*</span> s</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a>    f_readopt <span class="op">=</span> α <span class="op">*</span> adoption <span class="op">*</span> x</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>    f_out     <span class="op">=</span> p2_t <span class="op">*</span> a</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>    du[<span class="fl">1</span>] <span class="op">=</span> <span class="op">-</span>f_in</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>    du[<span class="fl">2</span>] <span class="op">=</span> f_in <span class="op">+</span> f_readopt <span class="op">-</span> f_out</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>    du[<span class="fl">3</span>] <span class="op">=</span> f_out <span class="op">-</span> f_readopt</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<h3 id="e.3-turing-モデル定義">E.3 Turing モデル定義</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">using</span> Turing<span class="op">,</span> Distributions</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="pp">@model</span> <span class="kw">function</span> nbd_bass_joint(t_bass<span class="op">,</span> A_bass<span class="op">,</span> a0_init<span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>                                t_freq<span class="op">,</span> freq_counts<span class="op">,</span> freq_is_post)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="co"># Bass パラメータ事前</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    p1_base <span class="op">~</span> Uniform(<span class="fl">0.0</span><span class="op">,</span> <span class="fl">0.3</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    A1      <span class="op">~</span> Uniform(<span class="fl">0.0</span><span class="op">,</span> <span class="fl">0.5</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    c1      <span class="op">~</span> Uniform(<span class="fl">1994.0</span><span class="op">,</span> <span class="fl">2005.0</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    w1      <span class="op">~</span> Uniform(<span class="fl">0.5</span><span class="op">,</span> <span class="fl">5.0</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>    p2_base <span class="op">~</span> Uniform(<span class="fl">0.0</span><span class="op">,</span> <span class="fl">0.3</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>    A2      <span class="op">~</span> Uniform(<span class="fl">0.0</span><span class="op">,</span> <span class="fl">0.5</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    c2      <span class="op">~</span> Uniform(<span class="fl">2005.0</span><span class="op">,</span> <span class="fl">2019.0</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    w2      <span class="op">~</span> Uniform(<span class="fl">0.5</span><span class="op">,</span> <span class="fl">5.0</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a>    q1      <span class="op">~</span> Uniform(<span class="fl">0.0</span><span class="op">,</span> <span class="fl">2.0</span>)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>    α       <span class="op">~</span> Uniform(<span class="fl">0.0</span><span class="op">,</span> <span class="fl">1.0</span>)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true"></a>    M       <span class="op">~</span> Uniform(<span class="fl">1500.0</span><span class="op">,</span> <span class="fl">5000.0</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true"></a>    σ       <span class="op">~</span> Uniform(<span class="fl">20.0</span><span class="op">,</span> <span class="fl">500.0</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true"></a>    <span class="co"># NBD 時変事前</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true"></a>    r0     <span class="op">~</span> Uniform(log(<span class="fl">0.05</span>)<span class="op">,</span> log(<span class="fl">5.0</span>))</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true"></a>    r1     <span class="op">~</span> Uniform(<span class="op">-</span><span class="fl">0.2</span><span class="op">,</span> <span class="fl">0.2</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true"></a>    a0_nbd <span class="op">~</span> Uniform(log(<span class="fl">0.001</span>)<span class="op">,</span> log(<span class="fl">1.0</span>))</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true"></a>    a1_nbd <span class="op">~</span> Uniform(<span class="op">-</span><span class="fl">0.3</span><span class="op">,</span> <span class="fl">0.3</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true"></a>    <span class="co"># Bass ODE 解</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true"></a>    a_pred <span class="op">=</span> solve_bass_a(p1_base<span class="op">,</span> A1<span class="op">,</span> c1<span class="op">,</span> w1<span class="op">,</span> p2_base<span class="op">,</span> A2<span class="op">,</span> c2<span class="op">,</span> w2<span class="op">,</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true"></a>                          q1<span class="op">,</span> α<span class="op">,</span> a0_init<span class="op">,</span> t_bass)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true"></a>    <span class="co"># 観測 1: 年次参加人口</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true"></a>    <span class="kw">for</span> i <span class="kw">in</span> eachindex(t_bass)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true"></a>        t <span class="op">=</span> t_bass[i]</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true"></a>        r_t <span class="op">=</span> exp(r0 <span class="op">+</span> r1 <span class="op">*</span> (t <span class="op">-</span> <span class="fl">2013.0</span>))</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true"></a>        α_t <span class="op">=</span> exp(a0_nbd <span class="op">+</span> a1_nbd <span class="op">*</span> (t <span class="op">-</span> <span class="fl">2013.0</span>))</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true"></a>        p_act <span class="op">=</span> <span class="fl">1.0</span> <span class="op">-</span> exp(r_t <span class="op">*</span> log(α_t <span class="op">/</span> (α_t <span class="op">+</span> <span class="fl">1</span>)))</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true"></a>        μ <span class="op">=</span> M <span class="op">*</span> a_pred[i] <span class="op">*</span> p_act</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true"></a>        A_bass[i] <span class="op">~</span> Normal(μ, σ)</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true"></a></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true"></a>    <span class="co"># 観測 2: 頻度ビン</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true"></a>    <span class="kw">for</span> j <span class="kw">in</span> eachindex(t_freq)</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true"></a>        t <span class="op">=</span> t_freq[j]</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true"></a>        r_t <span class="op">=</span> exp(r0 <span class="op">+</span> r1 <span class="op">*</span> (t <span class="op">-</span> <span class="fl">2013.0</span>))</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true"></a>        α_t <span class="op">=</span> exp(a0_nbd <span class="op">+</span> a1_nbd <span class="op">*</span> (t <span class="op">-</span> <span class="fl">2013.0</span>))</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true"></a>        bins <span class="op">=</span> freq_is_post[j] ?</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true"></a>            [(<span class="fl">104</span><span class="op">,</span><span class="fl">10000</span>)<span class="op">,</span>(<span class="fl">48</span><span class="op">,</span><span class="fl">104</span>)<span class="op">,</span>(<span class="fl">12</span><span class="op">,</span><span class="fl">48</span>)<span class="op">,</span>(<span class="fl">4</span><span class="op">,</span><span class="fl">12</span>)<span class="op">,</span>(<span class="fl">1</span><span class="op">,</span><span class="fl">4</span>)] <span class="op">:</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true"></a>            [(<span class="fl">104</span><span class="op">,</span><span class="fl">10000</span>)<span class="op">,</span>(<span class="fl">48</span><span class="op">,</span><span class="fl">104</span>)<span class="op">,</span>(<span class="fl">12</span><span class="op">,</span><span class="fl">48</span>)<span class="op">,</span>(<span class="fl">5</span><span class="op">,</span><span class="fl">12</span>)<span class="op">,</span>(<span class="fl">2</span><span class="op">,</span><span class="fl">5</span>)]</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true"></a>        ps<span class="op">,</span> _ <span class="op">=</span> bin_probs(r_t<span class="op">,</span> α_t<span class="op">,</span> bins)</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true"></a>        ps <span class="op">=</span> ps <span class="op">./</span> sum(ps)</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true"></a>        freq_counts[j<span class="op">,</span> <span class="op">:</span>] <span class="op">~</span> Multinomial(<span class="fl">1500</span><span class="op">,</span> ps)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true"></a>    <span class="kw">end</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true"></a><span class="kw">end</span></span></code></pre></div>
+<h3 id="e.4-mcmc-実行">E.4 MCMC 実行</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode julia"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>model <span class="op">=</span> nbd_bass_joint(t_bass<span class="op">,</span> A_bass<span class="op">,</span> a0_init<span class="op">,</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>                       t_freq<span class="op">,</span> freq_counts<span class="op">,</span> freq_is_post)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>init_vals <span class="op">=</span> (<span class="op">;</span> p1_base<span class="op">=</span><span class="fl">0.02</span><span class="op">,</span> A1<span class="op">=</span><span class="fl">0.1</span><span class="op">,</span> c1<span class="op">=</span><span class="fl">1998.0</span><span class="op">,</span> w1<span class="op">=</span><span class="fl">2.0</span><span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>              p2_base<span class="op">=</span><span class="fl">0.05</span><span class="op">,</span> A2<span class="op">=</span><span class="fl">0.15</span><span class="op">,</span> c2<span class="op">=</span><span class="fl">2015.0</span><span class="op">,</span> w2<span class="op">=</span><span class="fl">2.0</span><span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>              q1<span class="op">=</span><span class="fl">0.5</span><span class="op">,</span> α<span class="op">=</span><span class="fl">0.3</span><span class="op">,</span> M<span class="op">=</span><span class="fl">2500.0</span><span class="op">,</span> σ<span class="op">=</span><span class="fl">150.0</span><span class="op">,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>              r0<span class="op">=</span>log(<span class="fl">0.5</span>)<span class="op">,</span> r1<span class="op">=</span><span class="fl">0.0</span><span class="op">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>              a0_nbd<span class="op">=</span>log(<span class="fl">0.01</span>)<span class="op">,</span> a1_nbd<span class="op">=</span><span class="fl">0.0</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>chain <span class="op">=</span> sample(model<span class="op">,</span> NUTS(<span class="fl">0.9</span><span class="op">;</span> max_depth<span class="op">=</span><span class="fl">10</span>)<span class="op">,</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>               MCMCThreads()<span class="op">,</span> <span class="fl">1000</span><span class="op">,</span> <span class="fl">4</span><span class="op">;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>               initial_params<span class="op">=</span>fill(init_vals<span class="op">,</span> <span class="fl">4</span>))</span></code></pre></div>
+<hr />
+<h2 id="付録-f補足数値結果">付録 F：補足数値結果</h2>
+<h3 id="f.1-平均利用強度-mathbbelambdat-の年次表事後中央値">F.1 平均利用強度 <span class="math inline">\(\mathbb{E}[\lambda](t)\)</span> の年次表（事後中央値）</h3>
+<table>
+<thead>
+<tr class="header">
+<th>年</th>
+<th><span class="math inline">\(r(t)\)</span></th>
+<th><span class="math inline">\(\alpha(t)\)</span></th>
+<th><span class="math inline">\(\mathbb{E}[\lambda]\)</span></th>
+<th><span class="math inline">\(P_{\text{active}}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1994</td>
+<td>0.3171</td>
+<td>0.00802</td>
+<td>39.5 回</td>
+<td>0.811</td>
+</tr>
+<tr class="even">
+<td>2000</td>
+<td>0.3324</td>
+<td>0.00703</td>
+<td>47.3 回</td>
+<td>0.824</td>
+</tr>
+<tr class="odd">
+<td>2005</td>
+<td>0.3464</td>
+<td>0.00630</td>
+<td>55.0 回</td>
+<td>0.834</td>
+</tr>
+<tr class="even">
+<td>2008</td>
+<td>0.3551</td>
+<td>0.00594</td>
+<td>59.8 回</td>
+<td>0.840</td>
+</tr>
+<tr class="odd">
+<td>2010</td>
+<td>0.3608</td>
+<td>0.00569</td>
+<td>63.4 回</td>
+<td>0.844</td>
+</tr>
+<tr class="even">
+<td>2013</td>
+<td>0.3695</td>
+<td>0.00566</td>
+<td>65.3 回</td>
+<td>0.852</td>
+</tr>
+<tr class="odd">
+<td>2015</td>
+<td>0.3754</td>
+<td>0.00542</td>
+<td>69.3 回</td>
+<td>0.858</td>
+</tr>
+<tr class="even">
+<td>2018</td>
+<td>0.3845</td>
+<td>0.00509</td>
+<td>75.5 回</td>
+<td>0.864</td>
+</tr>
+<tr class="odd">
+<td>2019</td>
+<td>0.3876</td>
+<td>0.00498</td>
+<td>77.8 回</td>
+<td>0.866</td>
+</tr>
+</tbody>
+</table>
+<h3 id="f.2-規制ダミー版との比較参考">F.2 規制ダミー版との比較（参考）</h3>
+<p><code>Pachinko_NBD_Bass_Regulation.ipynb</code> の主要結果は本稿の Joint 版とほぼ同様だが、規制ダミー係数はすべて 95%CI がゼロを含む：</p>
+<table>
+<thead>
+<tr class="header">
+<th>規制係数</th>
+<th>中央値</th>
+<th>95%CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\beta_{2006}\)</span> (5 号機)</td>
+<td><span class="math inline">\(+0.003\)</span></td>
+<td><span class="math inline">\([-0.21, +0.21]\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\beta_{2011}\)</span> (震災)</td>
+<td><span class="math inline">\(-0.037\)</span></td>
+<td><span class="math inline">\([-0.24, +0.17]\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\beta_{2018}\)</span> (新基準機)</td>
+<td><span class="math inline">\(-0.001\)</span></td>
+<td><span class="math inline">\([-0.23, +0.22]\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>震災効果のみ事後の 64% が負側にあり、方向性として整合的だが有意水準には届かない。</p>
+<h3 id="f.3-事前-vs-事後の縮約度">F.3 事前 vs 事後の縮約度</h3>
+<p>主要パラメータの事前分布の幅と事後 95%CI 幅の比：</p>
+<table>
+<thead>
+<tr class="header">
+<th>パラメータ</th>
+<th>事前幅</th>
+<th>事後 95%CI 幅</th>
+<th>縮約率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(c_2\)</span></td>
+<td>14 年</td>
+<td>8 年</td>
+<td>43%</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(M\)</span></td>
+<td>3500 万人</td>
+<td>1465 万人</td>
+<td>58%</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a_1\)</span></td>
+<td>0.6</td>
+<td>0.031</td>
+<td>95%</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(a_0\)</span></td>
+<td>7.9</td>
+<td>0.124</td>
+<td>98%</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>480</td>
+<td>111</td>
+<td>77%</td>
+</tr>
+</tbody>
+</table>
+<p>NBD の <span class="math inline">\(a_0, a_1\)</span> で 95% 以上の縮約があり、これは頻度ビン観測の情報量が極めて高いことを示す。Bass の <span class="math inline">\(c_2\)</span> も 43% の縮約で、これは閾値観測 26 点だけでも構造変化点を絞れていることを示す。</p>
+<hr />
+<p><strong>論文終了</strong></p>
+<p><em>本論文の再現コード、データ、補助図はすべて GitHub で公開予定（リポジトリ予定 URL：執筆時点で未確定）。</em></p>
+</div>
+</body>
+</html>
