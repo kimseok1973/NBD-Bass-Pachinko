@@ -145,8 +145,8 @@ MCMC は 4 コアで約 22 分（M2 Pro）。NUTS sampler、4 chains × 1000 ite
 学術的に本研究を引用される場合：
 
 ```bibtex
-@misc{kim2026nbdbass,
-  author       = {Kim, Tetsu},
+@misc{matsuyama2026nbdbass,
+  author       = {Matsuyama, Tetsu},
   title        = {Threshold-Adjusted Diffusion Dynamics: A Joint NBD-Bass Bayesian Model for Japan's Pachinko Market},
   year         = {2026},
   howpublished = {GitHub repository},

@@ -4,7 +4,7 @@ title: "NBD-Bass-Pachinko: Threshold-Adjusted Diffusion Dynamics for Japan's Pac
 version: "1.0.0"
 date-released: "2026-05-20"
 authors:
-  - family-names: "Kim"
+  - family-names: "Matsuyama"
     given-names: "Tetsu"
     alias: "kimseok1973"
 repository-code: "https://github.com/kimseok1973/NBD-Bass-Pachinko"
@@ -32,7 +32,7 @@ preferred-citation:
   type: generic
   title: "Threshold-Adjusted Diffusion Dynamics: A Joint NBD-Bass Bayesian Model for Japan's Pachinko Market"
   authors:
-    - family-names: "Kim"
+    - family-names: "Matsuyama"
       given-names: "Tetsu"
   year: 2026
   url: "https://github.com/kimseok1973/NBD-Bass-Pachinko"
